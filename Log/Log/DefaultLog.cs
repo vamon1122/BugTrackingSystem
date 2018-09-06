@@ -16,14 +16,19 @@ namespace BenLog
         //Home
         //private static Log DefaultLog = new Log(@"M:\Users\benba\My Documents\Production\Code Projects\C#\Bug Tracking System\BTS Class Lib + Con Test\log.txt");
 
+
+
         public static void Break()
         {
+            
             DefaultLog.Break();
+            
         }
 
         public static void Input(string value)
         {
             DefaultLog.Input(value);
+            
         }
 
         public static void Output(string value)
@@ -33,17 +38,17 @@ namespace BenLog
 
         public static void Func(string value)
         {
-            DefaultLog.Func(value);
+            DefaultLog.Func(value);   
         }
 
         public static void Debug(string value)
         {
-            DefaultLog.Debug(value);
+            DefaultLog.Debug(value);   
         }
 
         public static void Info(string value)
         {
-            DefaultLog.Info(value);
+            DefaultLog.Info(value);   
         }
 
         public static void Error(string value)

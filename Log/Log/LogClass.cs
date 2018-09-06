@@ -113,36 +113,43 @@ namespace BenLog
 
         public void Break()
         {
+            System.Diagnostics.Debug.WriteLine("");
             WriteLog();
         }
 
         public void Input(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - input] " + value);
             WriteLog("input", value);
         }
 
         public void Output(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - output] " + value);
             WriteLog("output", value);
         }
 
         public void Func(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - func] " + value);
             WriteLog("function", value);
         }
 
         public void Debug(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - debug] " + value);
             WriteLog("debug", value);
         }
 
         public void Info(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - info] " + value);
             WriteLog("info", value);
         }
 
         public void Error(string value)
         {
+            System.Diagnostics.Debug.WriteLine("[log - error] " + value);
             WriteLog("error", value);
         }
     }

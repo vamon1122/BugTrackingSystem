@@ -1,0 +1,20 @@
+AppLog.Info("<FUNCTION> <CLASS> - Starting...");
+AppLog.Info(String.Format("<FUNCTION> <CLASS> - <Class> {0} was not created because offline mode is on", <class identifier>));
+
+//Retrieve data offline
+AppLog.Info("<FUNCTION> <CLASS> - Offline mode is ON, retrieving cached <class> data from local database");
+AppLog.Info("<FUNCTION> <CLASS> - Offline mode is OFF, retrieving <class> data from online database");
+
+//Set data offline
+AppLog.Info("<FUNCTION> <CLASS> - Offline mode is OFF");
+AppLog.Info("<FUNCTION> <CLASS> - Offline mode is ON. Skipping create <class> on online database");
+
+
+AppLog.Info("<FUNCTION> <CLASS> - Attempting to <function> <class> on <online/local> database...");
+
+AppLog.Info("<FUNCTION> <CLASS> - Attempting to open connection to <online/local> database...");
+AppLog.Info("<FUNCTION> <CLASS> - Connection to <online/local> database opened successfully");
+
+AppLog.Info(String.Format("<FUNCTION> <CLASS> - <Class> {0} <function> on <online/local> database successfully", "<class identifier>"));
+
+AppLog.Info("<FUNCTION> <CLASS> - Success!");
