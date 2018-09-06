@@ -370,9 +370,10 @@ namespace BTS_Class_Library
                         TempTag.Create();
                     }
                 }
-            
-           
 
+            AppLog.Debug("CREATE BUG - Attempting to add bug to DATA...");
+            Data.Bugs.Add(this);
+            AppLog.Debug("CREATE BUG - ...Success! Added bug to DATA");
             AppLog.Info("CREATE BUG - Success!");
             return true;
         }

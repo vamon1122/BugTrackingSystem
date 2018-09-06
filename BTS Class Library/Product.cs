@@ -194,6 +194,10 @@ namespace BTS_Class_Library
                 return false;
             }
 
+
+            AppLog.Debug("CREATE PRODUCT - Attempting to add product to DATA...");
+            Data.Products.Add(this);
+            AppLog.Debug("CREATE PRODUCT - ...Success! Added product to DATA");
             AppLog.Info("CREATE PRODUCT - Success!");
             return true;
         }

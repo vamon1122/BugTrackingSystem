@@ -10,8 +10,80 @@ using System.Data.SqlClient;
 
 namespace BTS_Class_Library
 {
+    static class PrivateData
+    {
+        internal static List<Bug> Bugs = new List<Bug>();
+        internal static List<Tag> Tags = new List<Tag>();
+        internal static List<Note> Notes = new List<Note>();
+        internal static List<Assignee> Assignees = new List<Assignee>();
+        internal static List<TagType> TagTypes = new List<TagType>();
+        internal static List<Product> Products = new List<Product>();
+        internal static List<OrgMember> OrgMembers = new List<OrgMember>();
+        internal static List<Organisation> Organisations = new List<Organisation>();
+    }
+
     public static class Data
     {
+        #region Private Data
+        public static void AddBug(Bug pBug)
+        {
+            PrivateData.Bugs.Add(pBug);
+        }
+
+        public static List<Bug> Bugs { get { return PrivateData.Bugs; } }
+
+        public static void AddTag(Tag pTag)
+        {
+            PrivateData.Tags.Add(pTag);
+        }
+
+        public static List<Tag> Tags { get { return PrivateData.Tags; } }
+
+        public static void AddNote(Note pNote)
+        {
+            PrivateData.Notes.Add(pNote);
+        }
+
+        public static List<Note> Notes { get { return PrivateData.Notes; } }
+
+        public static void AddAssignee(Assignee pAssignee)
+        {
+            PrivateData.Assignees.Add(pAssignee);
+        }
+
+        public static List<Assignee> Assignees { get { return PrivateData.Assignees; } }
+
+        public static void AddTagType(TagType pTagType)
+        {
+            PrivateData.TagTypes.Add(pTagType);
+        }
+
+        public static List<TagType> TagTypes { get { return PrivateData.TagTypes; } }
+
+        public static void AddProduct(Product pProduct)
+        {
+            PrivateData.Products.Add(pProduct);
+        }
+
+        public static List<Product> Products { get { return PrivateData.Products; } }
+
+        public static void AddOrgMember(OrgMember pOrgMember)
+        {
+            AppLog.Debug(String.Format("BEN3 Data.OrgMembers.Add({0} Org: {1} User: {2})", pOrgMember.MyUser.FullName, pOrgMember.OrgId, pOrgMember.MyUser.Id));
+            PrivateData.OrgMembers.Add(pOrgMember);
+        }
+
+        public static List<OrgMember> OrgMembers { get { return PrivateData.OrgMembers; } }
+
+        public static void AddOrganisation(Organisation pOrganisation)
+        {
+            AppLog.Debug(String.Format("BEN2 Data.Organisations.Add({0})", pOrganisation.Name));
+            PrivateData.Organisations.Add(pOrganisation);
+        }
+
+        public static List<Organisation> Organisations { get { return PrivateData.Organisations; } }
+
+        #endregion
 
         //public static Log MyLog = 
 
@@ -44,14 +116,9 @@ namespace BTS_Class_Library
         public static List<Note> ActiveProductBugNoteList = new List<Note>();
         public static List<TagType> ActiveOrgTagTypeList = new List<TagType>();*/
 
-        public static List<Organisation> Organisations = new List<Organisation>();
-        public static List<Bug> Bugs = new List<Bug>();
-        public static List<Tag> Tags = new List<Tag>();
-        public static List<Note> Notes = new List<Note>();
-        public static List<Assignee> Assignees = new List<Assignee>();
-        public static List<TagType> TagTypes = new List<TagType>();
-        public static List<Product> Products = new List<Product>();
-        public static List<OrgMember> OrgMembers = new List<OrgMember>();
+        
+
+        
 
         public static bool OfflineMode = false;
 
@@ -84,7 +151,7 @@ namespace BTS_Class_Library
                                 Organisation TempOrg = new Organisation(new Guid(reader[0].ToString()));
                                 if (TempOrg.Get())
                                 {
-                                    Organisations.Add(TempOrg);
+                                    AddOrganisation(TempOrg);
                                     //ActiveUserOrganisations.Add(TempOrg);
                                     //DownloadedOrganisations++;
                                 }
@@ -124,7 +191,7 @@ namespace BTS_Class_Library
                                 Organisation TempOrg = new Organisation(new Guid(reader[0].ToString()));
                                 if (TempOrg.Get())
                                 {
-                                    Organisations.Add(TempOrg);
+                                    AddOrganisation(TempOrg);
                                     AppLog.Info("###Added organisation: " + TempOrg.Name);
                                     //ActiveUserOrganisations.Add(TempOrg);
                                     //DownloadedOrganisations++;
@@ -183,7 +250,7 @@ namespace BTS_Class_Library
 
                                     DownloadedTagTypes++;
 
-                                    TagTypes.Add(TempTagType);
+                                    AddTagType(TempTagType);
                                 }
                             }
                         }
@@ -212,7 +279,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading product for organisation: " + TempTagType.ErrMsg;
                                         
                                     }
-                                    TagTypes.Add(TempTagType);
+                                    AddTagType(TempTagType);
 
                                     DownloadedTagTypes++;
                                 }
@@ -261,7 +328,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading OrgMember for organisation: " + TempOrgMember.ErrMsg;
                                         
                                     }
-                                    OrgMembers.Add(TempOrgMember);
+                                    AddOrgMember(TempOrgMember);
                                 }
                             }
                             AppLog.Info("ORG ORGMEMBERS (Getter) - OrgMembers downloaded from local database successfully");
@@ -294,7 +361,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading OrgMember for organisation: " + TempOrgMember.ErrMsg;
                                         
                                     }
-                                    OrgMembers.Add(TempOrgMember);
+                                    AddOrgMember(TempOrgMember);
                                 }
                             }
                         }
@@ -336,7 +403,7 @@ namespace BTS_Class_Library
                                     }
 
 
-                                    Products.Add(TempProduct);
+                                    AddProduct(TempProduct);
                                     TempOrgProducts.Add(TempProduct);
                                 }
                             }
@@ -366,7 +433,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading product for organisation: " + TempProduct.ErrMsg;
 
                                     }
-                                    Products.Add(TempProduct);
+                                    AddProduct(TempProduct);
                                     TempOrgProducts.Add(TempProduct);
 
 
@@ -384,8 +451,7 @@ namespace BTS_Class_Library
 
                     List<Bug> TempProductBugs = new List<Bug>();
                     /////Get product's bugs start/////
-                    {
-                        
+                    {   
                         if (Data.OfflineMode)
                         {
                             AppLog.Info("PRODUCT BUGS (Getter) - Attempting to retrieve product's bugs from local database...");
@@ -410,7 +476,7 @@ namespace BTS_Class_Library
                                            
                                         }
                                         //Bugs.Add(TempBug);
-                                        Bugs.Add(TempBug);
+                                        AddBug(TempBug);
                                         TempProductBugs.Add(TempBug);
                                     }
                                 }
@@ -440,7 +506,7 @@ namespace BTS_Class_Library
                                             
                                         }
                                         //Bugs.Add(TempBug);
-                                        Bugs.Add(TempBug);
+                                        AddBug(TempBug);
                                         TempProductBugs.Add(TempBug);
                                     }
                                 }
@@ -496,7 +562,7 @@ namespace BTS_Class_Library
                                                 //_ErrMsg = "Error while downloading assignee for bug from local database: " + TempAssignee.ErrMsg;
 
                                             }
-                                            Assignees.Add(TempAssignee);
+                                            AddAssignee(TempAssignee);
                                         }
                                     }
                                     /*AppLog.Info(String.Format("INITIALISE - {0} assignees were retrieved for bug from local database " +
@@ -534,7 +600,7 @@ namespace BTS_Class_Library
                                                 //_ErrMsg = "Error while downloading assignee for bug from online database: " + TempAssignee.ErrMsg;
 
                                             }
-                                            Assignees.Add(TempAssignee);
+                                            AddAssignee(TempAssignee);
                                             //DownloadedAssignees++;
                                         }
                                     }
@@ -569,7 +635,7 @@ namespace BTS_Class_Library
                                     {
                                         while (reader.Read())
                                         {
-                                            Notes.Add(new Note(new Guid(reader[0].ToString())));
+                                            AddNote(new Note(new Guid(reader[0].ToString())));
                                             //DownloadedNotes++;
                                         }
                                     }
@@ -601,7 +667,7 @@ namespace BTS_Class_Library
                                                 /*_ErrMsg = "Error while downloading note for bug: " + TempNote.ErrMsg;
                                                 throw new Exception(_ErrMsg);*/
                                             }
-                                            Notes.Add(TempNote);
+                                            AddNote(TempNote);
                                             //DownloadedNotes++;
                                         }
                                     }
@@ -616,13 +682,14 @@ namespace BTS_Class_Library
 
                         /////Get bug's tags start/////
                         {
-                            AppLog.Info("BUG ASSIGNEES (Getter) - Attempting to retrieve bug's tags from local database...");
+                            
 
                             
                             
 
                             if (Data.OfflineMode)
                             {
+                                AppLog.Info("BUG TAGS (Getter) - Attempting to retrieve bug's tags from local database...");
                                 using (SqlConnection conn = new SqlConnection(LocalConnStr))
                                 {
                                     AppLog.Info("INITIALISE - Attempting to open connection to local database...");
@@ -643,7 +710,7 @@ namespace BTS_Class_Library
                                                 
 
                                             }
-                                            Tags.Add(TempTag);
+                                            AddTag(TempTag);
 
                                             //AppLog.Debug("###BEN! Temp tag {0} was added to Data.MyTags");
                                             //DownloadedTags++;
@@ -656,6 +723,7 @@ namespace BTS_Class_Library
                             }
                             else
                             {
+                                AppLog.Info("BUG TAGS (Getter) - Attempting to retrieve bug's tags from online database...");
                                 using (SqlConnection conn = new SqlConnection(OnlineConnStr))
                                 {
                                     AppLog.Info("INITIALISE - Attempting to open connection to online database...");
@@ -677,7 +745,7 @@ namespace BTS_Class_Library
                                                 //_ErrMsg = "Error while downloading tag for bug: " + TempTag.ErrMsg;
                                                 
                                             }
-                                            Tags.Add(TempTag);
+                                            AddTag(TempTag);
                                             //DownloadedTags++;
                                         }
                                     }

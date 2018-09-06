@@ -13,21 +13,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BTS_Class_Library;
 using System.Configuration;
+using BenLog;
 
 namespace BTS_WPF
 {
+    
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
     public partial class Win_Home : Window
     {
-        
+        static Log UiLog;
+        private static string CodeFileName = "Win_Home.xaml.cs";
 
         public Win_Home()
         {
 
             InitializeComponent();
-            if(Data.ActiveUser != null)
+
+            UiLog = new Log("UiLog.txt");
+
+            UiLog.Debug("Initialising home page...");
+
+            if (Data.ActiveUser != null)
             {
                 //combo_ActiveUser.Items.Add(Data.ActiveUser);
 
@@ -38,10 +46,12 @@ namespace BTS_WPF
                 
                 
             }
+            UiLog.Debug("...Success! Home page was initialised");
         }
 
         private void combo_ActiveOrg_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UiLog.Info("ActiveOrg selection was changed! Attempting to do 'combo_ActiveOrg_SelectionChanged' event...");
             Mouse.OverrideCursor = Cursors.Wait;
             combo_ActiveProduct.Items.Clear();
             //Data.ActiveOrgTagTypeList.Clear();
@@ -70,32 +80,46 @@ namespace BTS_WPF
             }
             
             Mouse.OverrideCursor = null;
+            UiLog.Info("...Success! 'combo_ActiveOrg_SelectionChanged' event was completed");
         }
 
         private void UpdateOrgList()
         {
+            string MethodName = "private void UpdateOrgList()";
+            string InfoPrefix = String.Format("[{0} {1}]", CodeFileName, MethodName);
+
+            UiLog.Info(InfoPrefix + " Attempting to update UI 'organisations' drop-down list from DATA 'organisations' list...");
             combo_ActiveOrg.Items.Clear();
+
+            UiLog.Debug(String.Format("{1} There are {0} items in Data.ActiveUser.Organisations", Data.ActiveUser.Organisations.Count(), InfoPrefix));
+
             foreach (Organisation Org in Data.ActiveUser.Organisations)
             {
+                UiLog.Debug(String.Format("{1} BEN!!! Organisation {0} found in ActiveUser.Organisations. {0} was added to list", Org.Name, InfoPrefix));
                 combo_ActiveOrg.Items.Add(Org);
             }
+            UiLog.Info(InfoPrefix + " Success! UI 'organisations' drop-down list was updated from DATA 'organisations' list");
         }
 
         private void UpdateProductList()
         {
-            
+            UiLog.Info("Attempting to update UI 'products' drop-down list from DATA 'products' list...");
             combo_ActiveProduct.Items.Clear();
+
+            UiLog.Debug(String.Format("There are {0} items in Data.ActiveOrg.Products", Data.ActiveOrg.Products.Count()));
 
             foreach (Product MyProduct in Data.ActiveOrg.Products)
             {
                 combo_ActiveProduct.Items.Add(MyProduct);
             }
+            UiLog.Info("Success! UI 'products' drop-down list was updated from DATA 'products' list");
         }
 
         
 
         public void UpdateBugList()
         {
+            UiLog.Info("Attempting to update UI 'bugs' scroll viewer list from DATA 'bugs' list...");
             BugStack.Children.Clear();
 
             foreach (Bug MyBug in Data.Bugs)
@@ -107,24 +131,27 @@ namespace BTS_WPF
             }
 
             Mouse.OverrideCursor = null;
+            UiLog.Info("Success! UI 'bugs' scroll viewer list was updated from DATA 'bugs' list");
         }
 
         private void combo_ActiveProduct_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            UiLog.Info("ActiveProduct selection was changed! Attempting to do 'combo_ActiveProduct_SelectionChanged' event...");
             if (combo_ActiveProduct.SelectedValue != null)
             {
                 Product TempProduct = new Product(new Guid(combo_ActiveProduct.SelectedValue.ToString()));
                 TempProduct.Get();
                 Data.ActiveProduct = TempProduct;
+                UiLog.Debug("Active product is now = " + TempProduct.Name);
             }
 
             UpdateBugList();
-            
+            UiLog.Info("...Success! 'combo_ActiveProduct_SelectionChanged' event was completed");
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
+            UiLog.Info("LogOut was clicked! Attempting to log user out...");
             Configuration config = ConfigurationManager.OpenExeConfiguration(AppDomain.CurrentDomain.BaseDirectory + "BTS WPF.exe");
             //config.AppSettings.Settings.Add("UsernameOrEmail", input_UsernameOrEMail.Text);
             //config.AppSettings.Settings.Add("Password", input_Password.Password);
@@ -157,6 +184,7 @@ namespace BTS_WPF
                     MyWindow.Close();
                 }
             }*/
+            UiLog.Info("...Success! User was logged out");
         }
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -221,12 +249,14 @@ namespace BTS_WPF
 
         private void butt_NewOrg_Click(object sender, RoutedEventArgs e)
         {
+            UiLog.Info("NewOrg was clicked!");
             new Win_Org().ShowDialog();
             UpdateOrgList();
         }
 
         private void butt_NewBug_Click(object sender, RoutedEventArgs e)
         {
+            UiLog.Info("NewBug was clicked!");
             if (Data.ActiveOrg == null)
             {
                 MessageBox.Show("You must select the organisation & product which you want to create a bug for first!", "Select Organisation", MessageBoxButton.OK);
@@ -244,6 +274,7 @@ namespace BTS_WPF
 
         private void butt_NewProduct_Click(object sender, RoutedEventArgs e)
         {
+            UiLog.Info("NewProduct was clicked!");
             if (Data.ActiveOrg == null)
             {
                 MessageBox.Show("You must select the organisation which you want to create a product for first!", "Select Organisation", MessageBoxButton.OK);
@@ -258,7 +289,8 @@ namespace BTS_WPF
 
         private void Click_EditOrg(object sender, RoutedEventArgs e)
         {
-            if(Data.ActiveOrg == null)
+            UiLog.Info("EditOrg was clicked!");
+            if (Data.ActiveOrg == null)
             {
                 MessageBox.Show("You must select the organisation which you want to edit first!", "Select Organisation", MessageBoxButton.OK);
             }

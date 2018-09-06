@@ -373,7 +373,6 @@ namespace BTS_WPF
                 {
                     if (MyBug.Create())
                     {
-                        Data.Bugs.Add(MyBug);
                         MyHomeWindow.UpdateBugList();
                         MessageBox.Show("Bug created successfully!");
                     }

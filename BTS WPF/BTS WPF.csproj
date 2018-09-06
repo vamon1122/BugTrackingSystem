@@ -260,5 +260,11 @@
   <ItemGroup>
     <Folder Include="Display\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Log\Log\Log.csproj">
+      <Project>{2b64c091-9b14-4af4-be51-06fa99a4abd9}</Project>
+      <Name>Log</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,6 +25,7 @@ namespace BTS_Class_Library
         private string _Address;
         private DateTime _DateTimeCreated;
         private string _ErrMsg;
+        private static string CodeFileName = "User.cs";
 
         public Guid Id { get { return _Id; } }
 
@@ -109,14 +110,22 @@ namespace BTS_Class_Library
         {
             get
             {
+                string MethodName = "public List<Organisation> Organisations get;";
+                string InfoPrefix = String.Format("[{0} {1}]", CodeFileName, MethodName);
+
+                AppLog.Debug(String.Format("{1} BEN!!! Getting {0}'s organisations", FullName, InfoPrefix));
                 List<Organisation> TempOrganisations = new List<Organisation>();
+
+                AppLog.Debug(String.Format("{1} Ben!!! There are {0} organisations in Data.Organisations", Data.Organisations.Count(), InfoPrefix));
 
                 foreach (Organisation TempOrg in Data.Organisations)
                 {
-                    foreach(OrgMember TempOrgMember in TempOrg.Members)
+                    AppLog.Debug(String.Format("{1} Ben!!! There are {0} organisation members in this organisation", TempOrg.Members.Count(), InfoPrefix));
+                    foreach (OrgMember TempOrgMember in TempOrg.Members)
                     {
                         if (TempOrgMember.MyUser.Id.ToString() == Id.ToString())
                         {
+                            AppLog.Debug(String.Format("{3} BEN!!! {0} is a member of {1} ({2})", FullName, TempOrg.Name, TempOrg.Id, InfoPrefix));
                             TempOrganisations.Add(TempOrg);
                         }
                     }

@@ -14,6 +14,7 @@ namespace BTS_Class_Library
         private string _Name;
         private DateTime _DateTimeCreated;
         private string _ErrMsg;
+        private static string CodeFileName = "Organisation.cs";
 
         public Guid Id { get { return _Id; } }
         public string Name {
@@ -35,14 +36,33 @@ namespace BTS_Class_Library
         public string ErrMsg { get { return _ErrMsg; } }
 
         public List<OrgMember> Members { get {
+
+
+                string MethodName = "public List<OrgMember> Members get;";
+                string InfoPrefix = String.Format("[{0} {1}]", CodeFileName, MethodName);
+
                 List<OrgMember> TempOrgMembers = new List<OrgMember>();
 
+                AppLog.Debug(String.Format("{1} BEN!!! There are {0} records in Data.OrgMembers", Data.OrgMembers.Count, InfoPrefix));
+
+                int i = 0;
                 foreach (OrgMember TempOrgMember in Data.OrgMembers)
                 {
+                    AppLog.Debug(String.Format("{2} Data.OrgMembers[{0}].FullName = {1}", i, TempOrgMember.MyUser.FullName, InfoPrefix));
                     if (TempOrgMember.OrgId.ToString() == Id.ToString())
                     {
+                        AppLog.Debug(InfoPrefix + " BEN!!! TempOrgMember.OrgId.ToString() == Id.ToString()");
+                        AppLog.Debug(String.Format("{2} BEN!!! {0} == {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
+                        AppLog.Debug(String.Format("{2} BEN!!! {0} IS a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
                         TempOrgMembers.Add(TempOrgMember);
                     }
+                    else
+                    {
+                        AppLog.Debug(InfoPrefix + "BEN!!! TempOrgMember.OrgId.ToString() != Id.ToString()");
+                        AppLog.Debug(String.Format("{2} BEN!!! {0} != {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
+                        AppLog.Debug(String.Format("{2} BEN!!! {0} IS not a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
+                    }
+                    i++;
                 }
 
                 return TempOrgMembers;
@@ -231,6 +251,21 @@ namespace BTS_Class_Library
                     "no action required. Continuing... ";
                 AppLog.Error("CREATE ORG - " + _ErrMsg + ": " + e);
             }
+
+            AppLog.Debug("CREATE ORG - Attempting to add organisation to DATA...");
+
+            if (Data.Organisations.GroupBy(x => x.Id).ToString() == this.Id.ToString())
+            {
+                AppLog.Debug("BEN!!! The organisation already exists!!!");
+            }
+            else
+            {
+                AppLog.Debug("BEN!!! The organisation does not exist!!!");
+            }
+
+            Data.Organisations.Add(this);
+            AppLog.Debug("CREATE ORG - ...Success! Added organisation to DATA");
+
             AppLog.Info(String.Format("CREATE ORG - Success!"));
             return true;
         }
