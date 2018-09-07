@@ -11,7 +11,7 @@ namespace BTS_Class_Library
     public class Product 
     {
         private Guid _Id;
-        private Organisation _MyOrg;
+        private Guid _OrgId;
         private string _Name;
         public bool Uploaded;
         private string _ErrMsg;
@@ -19,8 +19,15 @@ namespace BTS_Class_Library
         internal Product(Organisation pOrg)
         {
             _Id = Guid.NewGuid();
-            _MyOrg = pOrg;
+            _OrgId = pOrg.Id;
             Uploaded = false;
+        }
+
+        public Product(Guid pId, Guid pOrgId, string pName)
+        {
+            _Id = Guid.NewGuid();
+            _OrgId = pOrgId;
+            _Name = pName;
         }
 
         public Product(Guid pId) //Need this to be public for when i'm creating lists for the UI;
@@ -29,7 +36,14 @@ namespace BTS_Class_Library
         }
 
         public Guid Id { get { return _Id; } }
-        public Organisation MyOrg { get { return _MyOrg; } }
+        public Organisation MyOrg
+        {
+            get
+            {
+                bool has = Data.Organisations.Any(org => org.Id.ToString() == _OrgId.ToString());
+                return Data.Organisations.Single(org => org.Id.ToString() == _OrgId.ToString());
+            }
+        }
         public string Name
         {
             get
@@ -119,7 +133,7 @@ namespace BTS_Class_Library
                             SqlCommand CreateProduct = new SqlCommand("INSERT INTO t_Products VALUES(@Id, @OrgId, @Name);",
                             conn);
                             CreateProduct.Parameters.Add(new SqlParameter("Id", _Id));
-                            CreateProduct.Parameters.Add(new SqlParameter("OrgId", _MyOrg.Id));
+                            CreateProduct.Parameters.Add(new SqlParameter("OrgId", _OrgId));
                             CreateProduct.Parameters.Add(new SqlParameter("Name", _Name));
 
                             CreateProduct.ExecuteNonQuery();
@@ -176,7 +190,7 @@ namespace BTS_Class_Library
                     {
                         SqlCommand CreateProduct = new SqlCommand("INSERT INTO Products VALUES(@Id, @OrgId, @Name)", conn);
                         CreateProduct.Parameters.Add(new SqlParameter("Id", _Id));
-                        CreateProduct.Parameters.Add(new SqlParameter("OrgId", _MyOrg.Id));
+                        CreateProduct.Parameters.Add(new SqlParameter("OrgId", _OrgId));
                         CreateProduct.Parameters.Add(new SqlParameter("Name", _Name));
 
                         CreateProduct.ExecuteNonQuery();
@@ -296,7 +310,7 @@ namespace BTS_Class_Library
                         {
                             while (reader.Read())
                             {
-                                _MyOrg = new Organisation(new Guid(reader[1].ToString()));
+                                _OrgId = new Guid(reader[1].ToString());
                                 _Name = reader[2].ToString().Trim();
                             }
                         }
@@ -331,7 +345,7 @@ namespace BTS_Class_Library
                         {
                             while (reader.Read())
                             {
-                                _MyOrg = new Organisation(new Guid(reader[1].ToString()));
+                                _OrgId = new Guid(reader[1].ToString());
                                 _Name = reader[2].ToString().Trim();
                             }
                         }

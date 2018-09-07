@@ -147,7 +147,7 @@ namespace BTS_WPF
             {
                 if (TempTag.BugId.ToString() == MyBug.Id.ToString())
                 {
-                    Tag CopyOfTempTag = new Tag(TempTag.Id, TempTag.BugId, TempTag.Type);
+                    Tag CopyOfTempTag = new Tag(TempTag.Id, TempTag.BugId, TempTag.DateTimeCreated, TempTag.Type.Id);
 
                     MyTagCopies.Add(CopyOfTempTag);
                 }

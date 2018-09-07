@@ -20,9 +20,9 @@ namespace BTS_Class_Library
         private string _JobTitle;
         private string _EMail;
         private string _Password;
-        private string _Phone;
-        private string _PostCode;
-        private string _Address;
+        public string Phone;
+        public string PostCode;
+        public string Address;
         private DateTime _DateTimeCreated;
         private string _ErrMsg;
         private static string CodeFileName = "User.cs";
@@ -190,6 +190,19 @@ namespace BTS_Class_Library
 
         public string ErrMsg { get { return _ErrMsg; } }
 
+        public User(Guid pId, string pFname, string pSname, string pUsername, string pJobTitle, string pEmail, string pPwd, DateTime pDateTimeCreated)
+        {
+            _Id = pId;
+            _FName = pFname;
+            _SName = pSname;
+            _Username = pUsername;
+            _JobTitle = pJobTitle;
+            _EMail = pEmail;
+            _Password = pPwd;
+            _DateTimeCreated = pDateTimeCreated;
+
+        }
+
         public User(Guid pId)
         {
             _Id = pId;
@@ -312,31 +325,31 @@ namespace BTS_Class_Library
                             CreateUser_JobTitle.ExecuteNonQuery();
                         }
 
-                        if (_Phone != null && _Phone != "")
+                        if (Phone != null && Phone != "")
                         {
                             SqlCommand CreateUser_Phone = new SqlCommand("UPDATE t_Users SET Phone = @Phone WHERE Id = @Id;",
                                 conn);
-                            CreateUser_Phone.Parameters.Add(new SqlParameter("Phone", _Phone));
+                            CreateUser_Phone.Parameters.Add(new SqlParameter("Phone", Phone));
                             CreateUser_Phone.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_Phone.ExecuteNonQuery();
                         }
 
-                        if (_PostCode != null && _PostCode != "")
+                        if (PostCode != null && PostCode != "")
                         {
                             SqlCommand CreateUser_PostCode = new SqlCommand("UPDATE t_Users SET PostCode = @PostCode " +
                                 "WHERE Id = @Id;", conn);
-                            CreateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", _PostCode));
+                            CreateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", PostCode));
                             CreateUser_PostCode.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_PostCode.ExecuteNonQuery();
                         }
 
-                        if (_Address != null && _Address != "")
+                        if (Address != null && Address != "")
                         {
                             SqlCommand CreateUser_Address = new SqlCommand("UPDATE t_Users SET Address = @Address WHERE " +
                                 "Id = @Id;", conn);
-                            CreateUser_Address.Parameters.Add(new SqlParameter("Address", _Address));
+                            CreateUser_Address.Parameters.Add(new SqlParameter("Address", Address));
                             CreateUser_Address.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_Address.ExecuteNonQuery();
@@ -437,31 +450,31 @@ namespace BTS_Class_Library
                             CreateUser_JobTitle.ExecuteNonQuery();
                         }
 
-                        if (_Phone != null && _Phone != "")
+                        if (Phone != null && Phone != "")
                         {
                             SqlCommand CreateUser_Phone = new SqlCommand("UPDATE Users SET Phone = @Phone WHERE Id = @Id;",
                                 conn);
-                            CreateUser_Phone.Parameters.Add(new SqlParameter("Phone", _Phone));
+                            CreateUser_Phone.Parameters.Add(new SqlParameter("Phone", Phone));
                             CreateUser_Phone.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_Phone.ExecuteNonQuery();
                         }
 
-                        if (_PostCode != null && _PostCode != "")
+                        if (PostCode != null && PostCode != "")
                         {
                             SqlCommand CreateUser_PostCode = new SqlCommand("UPDATE Users SET PostCode = @PostCode " +
                                 "WHERE Id = @Id;", conn);
-                            CreateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", _PostCode));
+                            CreateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", PostCode));
                             CreateUser_PostCode.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_PostCode.ExecuteNonQuery();
                         }
 
-                        if (_Address != null && _Address != "")
+                        if (Address != null && Address != "")
                         {
                             SqlCommand CreateUser_Address = new SqlCommand("UPDATE Users SET Address = @Address " +
                                 "WHERE Id = @Id;", conn);
-                            CreateUser_Address.Parameters.Add(new SqlParameter("Address", _Address));
+                            CreateUser_Address.Parameters.Add(new SqlParameter("Address", Address));
                             CreateUser_Address.Parameters.Add(new SqlParameter("Id", _Id));
 
                             CreateUser_Address.ExecuteNonQuery();
@@ -571,31 +584,31 @@ namespace BTS_Class_Library
                         UpdateUser_JobTitle.ExecuteNonQuery();
                     }
 
-                    if (_Phone != null && _Phone != "")
+                    if (Phone != null && Phone != "")
                     {
                         SqlCommand UpdateUser_Phone = new SqlCommand("UPDATE t_Users SET Phone = @Phone WHERE Id = @Id;",
                             conn);
-                        UpdateUser_Phone.Parameters.Add(new SqlParameter("Phone", _Phone));
+                        UpdateUser_Phone.Parameters.Add(new SqlParameter("Phone", Phone));
                         UpdateUser_Phone.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_Phone.ExecuteNonQuery();
                     }
 
-                    if (_PostCode != null && _PostCode != "")
+                    if (PostCode != null && PostCode != "")
                     {
                         SqlCommand UpdateUser_PostCode = new SqlCommand("UPDATE t_Users SET PostCode = @PostCode WHERE Id = @Id;",
                             conn);
-                        UpdateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", _PostCode));
+                        UpdateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", PostCode));
                         UpdateUser_PostCode.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_PostCode.ExecuteNonQuery();
                     }
 
-                    if (_Address != null && _Address != "")
+                    if (Address != null && Address != "")
                     {
                         SqlCommand UpdateUser_Address = new SqlCommand("UPDATE t_Users SET Address = @Address WHERE Id = @Id;",
                             conn);
-                        UpdateUser_Address.Parameters.Add(new SqlParameter("Address", _Address));
+                        UpdateUser_Address.Parameters.Add(new SqlParameter("Address", Address));
                         UpdateUser_Address.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_Address.ExecuteNonQuery();
@@ -667,31 +680,31 @@ namespace BTS_Class_Library
                         UpdateUser_JobTitle.ExecuteNonQuery();
                     }
 
-                    if (_Phone != null && _Phone != "")
+                    if (Phone != null && Phone != "")
                     {
                         SqlCommand UpdateUser_Phone = new SqlCommand("UPDATE Users SET Phone = @Phone WHERE Id = @Id;",
                             conn);
-                        UpdateUser_Phone.Parameters.Add(new SqlParameter("Phone", _Phone));
+                        UpdateUser_Phone.Parameters.Add(new SqlParameter("Phone", Phone));
                         UpdateUser_Phone.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_Phone.ExecuteNonQuery();
                     }
 
-                    if (_PostCode != null && _PostCode != "")
+                    if (PostCode != null && PostCode != "")
                     {
                         SqlCommand UpdateUser_PostCode = new SqlCommand("UPDATE Users SET PostCode = @PostCode WHERE Id = @Id;",
                             conn);
-                        UpdateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", _PostCode));
+                        UpdateUser_PostCode.Parameters.Add(new SqlParameter("PostCode", PostCode));
                         UpdateUser_PostCode.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_PostCode.ExecuteNonQuery();
                     }
 
-                    if (_Address != null && _Address != "")
+                    if (Address != null && Address != "")
                     {
                         SqlCommand UpdateUser_Address = new SqlCommand("UPDATE Users SET Address = @Address WHERE Id = @Id;",
                             conn);
-                        UpdateUser_Address.Parameters.Add(new SqlParameter("Address", _Address));
+                        UpdateUser_Address.Parameters.Add(new SqlParameter("Address", Address));
                         UpdateUser_Address.Parameters.Add(new SqlParameter("Id", _Id));
 
                         UpdateUser_Address.ExecuteNonQuery();

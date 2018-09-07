@@ -12,7 +12,7 @@ namespace BTS_Class_Library
     {
         private Guid _Id;
         private Guid _ProductId;
-        private User _RaisedBy;
+        private Guid _RaisedById;
         private string _Title;
         private string _Description;
         private int _Severity;
@@ -30,7 +30,15 @@ namespace BTS_Class_Library
 
         public Guid Id { get { return _Id; } }
         public Guid ProductId { get { return _ProductId; } }
-        public User RaisedBy { get { return _RaisedBy; } }
+
+        public User RaisedBy
+        {
+            get
+            {
+                bool has = Data.Users.Any(user => user.Id.ToString() == _RaisedById.ToString());
+                return Data.Users.Single(user => user.Id.ToString() == _RaisedById.ToString());
+            }
+        }
 
         public string Title
         {
@@ -150,6 +158,18 @@ namespace BTS_Class_Library
 
         public string ErrMsg { get { return _ErrMsg; } }
 
+        public Bug (Guid pId, Guid pProductId, Guid pRaisedById, string pTitle, string pDescription, int pSeverity, DateTime pDateTimeCreated, DateTime ResolvedDateTime, DateTime pDateTimeEdited, Guid pEditedByUserId)
+        {
+            _Id = pId;
+            _ProductId = pProductId;
+            _RaisedById = pRaisedById;
+            _Title = pTitle;
+            _Description = pDescription;
+            _DateTimeCreated = pDateTimeCreated;
+            _DateTimeEdited = pDateTimeEdited;
+            _EditedByUserId = pEditedByUserId;
+        }
+
         public Bug(Guid pId)
         {
             _Id = pId;
@@ -178,7 +198,7 @@ namespace BTS_Class_Library
             }
             else
             {
-                _RaisedBy = Data.ActiveUser;
+                _RaisedById = Data.ActiveUser.Id;
             }
 
 
@@ -248,7 +268,7 @@ namespace BTS_Class_Library
 
                         CreateBug.Parameters.Add(new SqlParameter("Id", _Id));
                         CreateBug.Parameters.Add(new SqlParameter("ProductId", _ProductId));
-                        CreateBug.Parameters.Add(new SqlParameter("RaisedByUserId", _RaisedBy.Id));
+                        CreateBug.Parameters.Add(new SqlParameter("RaisedByUserId", _RaisedById));
                         CreateBug.Parameters.Add(new SqlParameter("Title", _Title));
                         CreateBug.Parameters.Add(new SqlParameter("Severity", _Severity));
                         CreateBug.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
@@ -315,7 +335,7 @@ namespace BTS_Class_Library
                             "@Severity, @DateTimeCreated, @DateTimeEdited, @EditedByUserId);", conn);
                         CreateBug.Parameters.Add(new SqlParameter("Id", _Id));
                         CreateBug.Parameters.Add(new SqlParameter("ProductId", _ProductId));
-                        CreateBug.Parameters.Add(new SqlParameter("RaisedByUserId", _RaisedBy.Id));
+                        CreateBug.Parameters.Add(new SqlParameter("RaisedByUserId", _RaisedById));
                         CreateBug.Parameters.Add(new SqlParameter("Title", _Title));
                         CreateBug.Parameters.Add(new SqlParameter("Severity", _Severity));
                         CreateBug.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
@@ -565,7 +585,7 @@ namespace BTS_Class_Library
                             {
                                 //_Id = new Guid(reader[0].ToString());
                                 _ProductId = new Guid(reader[1].ToString());
-                                _RaisedBy = new User(new Guid(reader[2].ToString()));
+                                _RaisedById = new Guid(reader[2].ToString());
                                 _Title = reader[3].ToString().Trim();
                                 _Severity = Convert.ToUInt16(reader[5]);
                                 _DateTimeCreated = Convert.ToDateTime(reader[6]);
@@ -613,7 +633,7 @@ namespace BTS_Class_Library
                             {
                                 _Id = new Guid(reader[0].ToString());
                                 _ProductId = new Guid(reader[1].ToString());
-                                _RaisedBy = new User(new Guid(reader[2].ToString()));
+                                _RaisedById = new Guid(reader[2].ToString());
                                 _Title = reader[3].ToString().Trim();
                                 _Severity = Convert.ToUInt16(reader[5]);
                                 _DateTimeCreated = Convert.ToDateTime(reader[6]);

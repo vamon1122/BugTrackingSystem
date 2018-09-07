@@ -14,14 +14,22 @@ namespace BTS_Class_Library
         private Guid _Id;
         private Guid _BugId;
         private DateTime _DateTimeCreated;
-        private TagType _MyTagType;
+        private Guid _TagTypeId;
         //public bool Uploaded; Tag properties cannot be changed
         private string _ErrMsg;
 
         public Guid Id { get { return _Id; } }
         public Guid BugId { get { return _BugId; } }
         public DateTime DateTimeCreated { get { return _DateTimeCreated; } }
-        public TagType Type { get { return _MyTagType; } }
+
+        public TagType Type
+        {
+            get
+            {
+                bool has = Data.TagTypes.Any(tagtype => tagtype.Id.ToString() == _TagTypeId.ToString());
+                return Data.TagTypes.Single(tagtype => tagtype.Id.ToString() == _TagTypeId.ToString());
+            }
+        }
         public string ErrMsg { get { return _ErrMsg; } }
 
         internal Tag(Guid pId)
@@ -34,16 +42,16 @@ namespace BTS_Class_Library
         {
             _Id = Guid.NewGuid();
             _BugId = pBug.Id;
-            _MyTagType = pTagType;
+            _TagTypeId = pTagType.Id;
             //_DateTimeCreated = DateTime.Now;
         }
 
-        public Tag(Guid pId, Guid pBugId, TagType pTagType)
+        public Tag(Guid pId, Guid pBugId, DateTime pDateTimeCreated, Guid pTagType)
         {
             _Id = pId;
             _BugId = pBugId;
-            _MyTagType = pTagType;
-            //_DateTimeCreated = DateTime.Now;
+            _TagTypeId = pTagType;
+            _DateTimeCreated = pDateTimeCreated;
         }
 
         public bool Create()
@@ -96,7 +104,7 @@ namespace BTS_Class_Library
                             CreateTag.Parameters.Add(new SqlParameter("Id", _Id));
                             CreateTag.Parameters.Add(new SqlParameter("BugId", BugId));
                             CreateTag.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
-                            CreateTag.Parameters.Add(new SqlParameter("TagTypeId", _MyTagType.Id));
+                            CreateTag.Parameters.Add(new SqlParameter("TagTypeId", _TagTypeId));
 
                             CreateTag.ExecuteNonQuery();
 
@@ -158,7 +166,7 @@ namespace BTS_Class_Library
                         CreateTag.Parameters.Add(new SqlParameter("Id", _Id));
                         CreateTag.Parameters.Add(new SqlParameter("BugId", BugId));
                         CreateTag.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
-                        CreateTag.Parameters.Add(new SqlParameter("TagTypeId", _MyTagType.Id));
+                        CreateTag.Parameters.Add(new SqlParameter("TagTypeId", _TagTypeId));
 
                         CreateTag.ExecuteNonQuery();
                         AppLog.Info(String.Format("CREATE TAG - Tag {0} created on local database successfully", Type.Value));
@@ -211,7 +219,7 @@ namespace BTS_Class_Library
                                 {
                                     throw new Exception("Error while downloading Tag's TagType: " + _ErrMsg);
                                 }
-                                _MyTagType = TempTagType;
+                               _TagTypeId = TempTagType.Id;
                             }
                         }
                     }
@@ -252,7 +260,7 @@ namespace BTS_Class_Library
                                 {
                                     throw new Exception("Error while downloading Tag's TagType: " + _ErrMsg);
                                 }
-                                _MyTagType = TempTagType;
+                                _TagTypeId = TempTagType.Id;
                             }
                         }
                     }

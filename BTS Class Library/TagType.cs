@@ -11,7 +11,7 @@ namespace BTS_Class_Library
     public class TagType
     {
         private Guid _Id;
-        private Organisation _MyOrg;
+        private Guid _OrgId;
         private string _Value;
         public bool Uploaded;
         private string _ErrMsg;
@@ -21,15 +21,31 @@ namespace BTS_Class_Library
             _Id = pId;
         }
 
+        public TagType(Guid pId, Guid pOrgId, string pValue)
+        {
+            _Id = pId;
+            _OrgId = pOrgId;
+            _Value = pValue;
+        }
+
         internal TagType(Organisation pOrg)
         {
             _Id = Guid.NewGuid();
-            _MyOrg = pOrg;
+            _OrgId = pOrg.Id;
             Uploaded = false;
         }
         
         public Guid Id { get { return _Id; } }
-        public Organisation MyOrg { get { return _MyOrg; } }
+
+        public Organisation MyOrg
+        {
+            get
+            {
+                bool has = Data.Organisations.Any(org => org.Id.ToString() == _OrgId.ToString());
+                return Data.Organisations.Single(org => org.Id.ToString() == _OrgId.ToString());
+            }
+        }
+
         public string Value
         {
             get
@@ -105,7 +121,7 @@ namespace BTS_Class_Library
                             SqlCommand CreateTagType = new SqlCommand("INSERT INTO t_TagTypes VALUES(@Id, @OrgId, @Value);",
                                 conn);
                             CreateTagType.Parameters.Add(new SqlParameter("Id", _Id));
-                            CreateTagType.Parameters.Add(new SqlParameter("OrgId", _MyOrg.Id));
+                            CreateTagType.Parameters.Add(new SqlParameter("OrgId", _OrgId));
                             CreateTagType.Parameters.Add(new SqlParameter("Value", _Value));
 
                             CreateTagType.ExecuteNonQuery();
@@ -166,7 +182,7 @@ namespace BTS_Class_Library
                         SqlCommand CreateTagType = new SqlCommand("INSERT INTO TagTypes VALUES(@Id, @OrgId, @Value, " +
                         "@Uploaded)", conn);
                         CreateTagType.Parameters.Add(new SqlParameter("Id", _Id));
-                        CreateTagType.Parameters.Add(new SqlParameter("OrgId", _MyOrg.Id));
+                        CreateTagType.Parameters.Add(new SqlParameter("OrgId", _OrgId));
                         CreateTagType.Parameters.Add(new SqlParameter("Value", _Value));
                         CreateTagType.Parameters.Add(new SqlParameter("Uploaded", Uploaded));
 
@@ -283,7 +299,7 @@ namespace BTS_Class_Library
                         {
                             while (reader.Read())
                             {
-                                _MyOrg = new Organisation(new Guid(reader[1].ToString()));
+                                _OrgId = new Guid(reader[1].ToString());
                                 _Value = reader[2].ToString().Trim();
                                 Uploaded = Convert.ToBoolean(reader[3]);
                             }
@@ -319,7 +335,7 @@ namespace BTS_Class_Library
                         {
                             while (reader.Read())
                             {
-                                _MyOrg = new Organisation(new Guid(reader[1].ToString()));
+                                _OrgId = new Guid(reader[1].ToString());
                                 _Value = reader[2].ToString().Trim();
                             }
                         }

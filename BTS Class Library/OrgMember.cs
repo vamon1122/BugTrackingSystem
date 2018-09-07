@@ -11,13 +11,31 @@ namespace BTS_Class_Library
     public class OrgMember
     {
         private Guid _OrgId;
-        private User _MyUser;
+        private Guid _UserId;
         private DateTime _DateTimeJoined;
         private int _AccessLevel;
         private string _ErrMsg;
 
         public Guid OrgId { get { return _OrgId; } }
-        public User MyUser { get { return _MyUser; } }
+        public Guid UserId { get { return _UserId; } }
+
+        public User MyUser { get
+            {
+                bool has = Data.Users.Any(user => user.Id.ToString() == _UserId.ToString());
+                return Data.Users.Single(user => user.Id.ToString() == _UserId.ToString());
+            }
+        }
+
+        public Organisation MyOrg
+        {
+            get
+            {
+                bool has = Data.Organisations.Any(org => org.Id.ToString() == OrgId.ToString());
+                return Data.Organisations.Single(org => org.Id.ToString() == OrgId.ToString());
+            }
+        }
+
+
         public DateTime DateTimeJoined { get { return _DateTimeJoined; } }
         public int AccessLevel
         {
@@ -27,11 +45,18 @@ namespace BTS_Class_Library
         public string ErrMsg { get { return _ErrMsg; } }
 
 
-        internal OrgMember(User pUser, Organisation pOrg)
+        internal OrgMember(Guid pUserId, Guid pOrgId)
         {
-            _OrgId = pOrg.Id;
-            _MyUser = pUser;
+            _OrgId = pOrgId;
+            _UserId = pUserId;
             //_DateTimeJoined = DateTime.Now;
+        }
+
+        public OrgMember(Guid pUserId, Guid pOrgId, DateTime pDateTimeJoined)
+        {
+            _UserId = pUserId;
+            _OrgId = pOrgId;
+            _DateTimeJoined = pDateTimeJoined;
         }
 
 
@@ -41,16 +66,16 @@ namespace BTS_Class_Library
             //Print identifiers to log
             AppLog.Info("CREATE ORGMEMBER - Starting...");
             AppLog.Info("CREATE ORGMEMBER - OrgMember's Org's Id: " + _OrgId);
-            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's Id: " + _MyUser.Id);
-            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's FullName: " + _MyUser.FullName);
-            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's Username: " + _MyUser.Username);
+            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's Id: " + _UserId);
+            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's FullName: " + MyUser.FullName);
+            AppLog.Info("CREATE ORGMEMBER - OrgMember's User's Username: " + MyUser.Username);
 
             //Checks offline mode (can't create users in offline mode)
             if (Data.OfflineMode)
             {
                 _ErrMsg = "Cannot create organisation members while in offline mode";
                 AppLog.Info(String.Format("CREATE ORGMEMBER - Organisation member {0} was not created because " +
-                    "offline mode is on", _MyUser.Username));
+                    "offline mode is on", MyUser.Username));
                 return false;
             }
 
@@ -85,7 +110,7 @@ namespace BTS_Class_Library
                     SqlCommand CheckOnlineDb = new SqlCommand("SELECT * FROM t_OrgMembers WHERE OrgId = @OrgId AND " +
                         "UserId = @UserId;", conn);
                     CheckOnlineDb.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    CheckOnlineDb.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    CheckOnlineDb.Parameters.Add(new SqlParameter("UserId", MyUser.Id));
                     using (SqlDataReader reader = CheckOnlineDb.ExecuteReader())
                     {
                         if (reader.Read())
@@ -104,14 +129,14 @@ namespace BTS_Class_Library
                         SqlCommand CreateOrgMember = new SqlCommand("INSERT INTO t_OrgMembers VALUES(@OrgId," +
                         "@UserId, @DateTimeJoined, @AccessLevel);", conn);
                         CreateOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                        CreateOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        CreateOrgMember.Parameters.Add(new SqlParameter("UserId", MyUser.Id));
                         CreateOrgMember.Parameters.Add(new SqlParameter("DateTimeJoined", _DateTimeJoined));
                         CreateOrgMember.Parameters.Add(new SqlParameter("AccessLevel", _AccessLevel));
 
                         CreateOrgMember.ExecuteNonQuery();
 
                         AppLog.Info(String.Format("CREATE ORGMEMBER - Organisation member {0} created on online " +
-                            "database successfully", _MyUser.FullName));
+                            "database successfully", MyUser.FullName));
                     }
                 }
             }
@@ -145,7 +170,7 @@ namespace BTS_Class_Library
                     SqlCommand CheckLocalDb = new SqlCommand("SELECT * FROM OrgMembers WHERE OrgId = @OrgId AND " +
                         "UserId = @UserId;", conn);
                     CheckLocalDb.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    CheckLocalDb.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    CheckLocalDb.Parameters.Add(new SqlParameter("UserId", _UserId));
                     using (SqlDataReader reader = CheckLocalDb.ExecuteReader())
                     {
                         if (reader.Read())
@@ -164,14 +189,14 @@ namespace BTS_Class_Library
                         SqlCommand CreateOrgMember = new SqlCommand("INSERT INTO OrgMembers VALUES(@OrgId," +
                         "@UserId, @DateTimeJoined, @AccessLevel);", conn);
                         CreateOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                        CreateOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        CreateOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
                         CreateOrgMember.Parameters.Add(new SqlParameter("DateTimeJoined", _DateTimeJoined));
                         CreateOrgMember.Parameters.Add(new SqlParameter("AccessLevel", _AccessLevel));
 
                         CreateOrgMember.ExecuteNonQuery();
 
                         AppLog.Info(String.Format("CREATE ORGMEMBER - Organisation member {0} created on local database " +
-                        "successfully.", _MyUser.FullName));
+                        "successfully.", MyUser.FullName));
                     }
                 }
             }
@@ -208,16 +233,16 @@ namespace BTS_Class_Library
         {
             AppLog.Info("UPDATE ORGMEMBER - Starting...");
             AppLog.Info("UPDATE ORGMEMBER - OrgMember's Org's Id: " + _OrgId);
-            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's Id: " + _MyUser.Id);
-            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's FullName: " + _MyUser.FullName);
-            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's Username: " + _MyUser.Username);
+            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's Id: " + _UserId);
+            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's FullName: " + MyUser.FullName);
+            AppLog.Info("UPDATE ORGMEMBER - OrgMember's User's Username: " + MyUser.Username);
 
             //Checks offline mode (can't update users in offline mode)
             if (Data.OfflineMode)
             {
                 _ErrMsg = "Cannot update organisation members while in offline mode";
                 AppLog.Info(String.Format("UPDATE ORGMEMBER - Organisation member {0} was not updated because " +
-                    "offline mode is on", _MyUser.Username));
+                    "offline mode is on", MyUser.Username));
                 return false;
             }
 
@@ -253,13 +278,13 @@ namespace BTS_Class_Library
                     SqlCommand UpdateOrgMember = new SqlCommand("UPDATE t_OrgMembers SET AccessLevel = @AccessLevel " +
                         "WHERE OrgId = @OrgId AND UserId = @UserId;", conn);
                     UpdateOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    UpdateOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    UpdateOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
                     UpdateOrgMember.Parameters.Add(new SqlParameter("AccessLevel", _AccessLevel));
 
                     AffectedRows = UpdateOrgMember.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("UPDATE ORGMEMBER - User {0} updated on online database " +
-                "successfully. {1} row(s) affected", _MyUser.FullName, AffectedRows));
+                "successfully. {1} row(s) affected", MyUser.FullName, AffectedRows));
             }
             catch (SqlException e)
             {
@@ -283,13 +308,13 @@ namespace BTS_Class_Library
                     SqlCommand UpdateOrgMember = new SqlCommand("UPDATE OrgMembers SET AccessLevel = @AccessLevel " +
                         "WHERE OrgId = @OrgId AND UserId = @UserId;", conn);
                     UpdateOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    UpdateOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    UpdateOrgMember.Parameters.Add(new SqlParameter("UserId", MyUser.Id));
                     UpdateOrgMember.Parameters.Add(new SqlParameter("AccessLevel", _AccessLevel));
 
                     AffectedRows = UpdateOrgMember.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("UPDATE ORGMEMBER - User {0} updated on local database " +
-                "successfully. {1} row(s) affected", _MyUser.FullName, AffectedRows));
+                "successfully. {1} row(s) affected", MyUser.FullName, AffectedRows));
             }
             catch (SqlException e)
             {
@@ -344,7 +369,7 @@ namespace BTS_Class_Library
         {
             AppLog.Info("GET ORGMEMBER - Starting...");
             AppLog.Info("GET ORGMEMBER - OrgMember's Org's Id: " + _OrgId);
-            AppLog.Info("GET ORGMEMBER - OrgMember's User's Id: " + _MyUser.Id);
+            AppLog.Info("GET ORGMEMBER - OrgMember's User's Id: " + _UserId);
 
             //Download from local db if offline mode is on
             if (Data.OfflineMode)
@@ -362,7 +387,7 @@ namespace BTS_Class_Library
                         SqlCommand GetOrgMember = new SqlCommand("SELECT * FROM OrgMembers " +
                             "WHERE OrgId = @OrgId AND UserId = @UserId;", conn);
                         GetOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                        GetOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        GetOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                         using (SqlDataReader reader = GetOrgMember.ExecuteReader())
                         {
@@ -406,7 +431,7 @@ namespace BTS_Class_Library
                         SqlCommand GetOrgMember = new SqlCommand("SELECT * FROM t_OrgMembers " +
                             "WHERE OrgId = @OrgId AND UserId = @UserId;", conn);
                         GetOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                        GetOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        GetOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                         using (SqlDataReader reader = GetOrgMember.ExecuteReader())
                         {
@@ -449,7 +474,7 @@ namespace BTS_Class_Library
                     SqlCommand CheckLocalDb = new SqlCommand("SELECT * FROM OrgMembers WHERE OrgId = @OrgId AND " +
                         "UserId = @UserId;", conn);
                     CheckLocalDb.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    CheckLocalDb.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    CheckLocalDb.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                     using (SqlDataReader reader = CheckLocalDb.ExecuteReader())
                     {
@@ -497,16 +522,16 @@ namespace BTS_Class_Library
         {
             AppLog.Info("DELETE ORGMEMBER - Starting...");
             AppLog.Info("DELETE ORGMEMBER - OrgMember's Org's Id: " + _OrgId);
-            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's Id: " + _MyUser.Id);
-            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's FullName: " + _MyUser.FullName);
-            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's Username: " + _MyUser.Username);
+            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's Id: " + _UserId);
+            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's FullName: " + MyUser.FullName);
+            AppLog.Info("DELETE ORGMEMBER - OrgMember's User's Username: " + MyUser.Username);
 
             //Checks offline mode (can't delete users in offline mode)
             if (Data.OfflineMode)
             {
                 _ErrMsg = "Cannot delete organisation members while in offline mode";
                 AppLog.Info(String.Format("CREATE ORGMEMBER - Organisation member {0} was not deleted because " +
-                    "offline mode is on", _MyUser.Username));
+                    "offline mode is on", MyUser.Username));
                 return false;
             }
 
@@ -526,12 +551,12 @@ namespace BTS_Class_Library
                         "AND UserId = @UserId;", conn);
 
                     DeleteOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    DeleteOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    DeleteOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                     AffectedRows = DeleteOrgMember.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("DELETE ORGMEMBER - Organisation member {0} deleted from online database " +
-                "successfully. {1} row(s) affected", _MyUser.FullName, AffectedRows));
+                "successfully. {1} row(s) affected", MyUser.FullName, AffectedRows));
             }
             catch (SqlException e)
             {
@@ -555,12 +580,12 @@ namespace BTS_Class_Library
                         "AND UserId = @UserId;", conn);
 
                     DeleteOrgMember.Parameters.Add(new SqlParameter("OrgId", _OrgId));
-                    DeleteOrgMember.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    DeleteOrgMember.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                     AffectedRows = DeleteOrgMember.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("DELETE ORGMEMBER - Organisation member {0} deleted from local database " +
-                "successfully. {1} row(s) affected", _MyUser.FullName, AffectedRows));
+                "successfully. {1} row(s) affected", MyUser.FullName, AffectedRows));
             }
             catch (SqlException e)
             {

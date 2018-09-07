@@ -13,9 +13,9 @@ namespace BTS_Class_Library
     {
         private Guid _Id;
         private Guid _BugId;
-        private User _CreatedBy;
+        private Guid _CreatedById;
         private DateTime _DateTimeCreated;
-        private User _EditedBy;
+        private Guid _EditedById;
         private DateTime _DateTimeEdited;
         private string _Title;
         private string _Body;
@@ -25,6 +25,18 @@ namespace BTS_Class_Library
         public Note(Guid pId)
         {
             _Id = pId;
+        }
+
+        public Note(Guid pId, Guid pBugId, Guid pCreatedById, DateTime pDateTimeCreated, Guid pEditedById, DateTime pDateTimeEdited, string pTitle, string pBody)
+        {
+            _Id = pId;
+            _BugId = pBugId;
+            _CreatedById = pCreatedById;
+            _DateTimeCreated = pDateTimeCreated;
+            _EditedById = pEditedById;
+            _DateTimeEdited = pDateTimeEdited;
+            _Title = pTitle;
+            _Body = pBody;
         }
 
         internal Note(Bug pBug)
@@ -37,15 +49,30 @@ namespace BTS_Class_Library
                 throw new Exception("Fatal error while creating note! Active user does not exist!");
             }
 
-            _CreatedBy = Data.ActiveUser;
-            _EditedBy = Data.ActiveUser;
+            _CreatedById = Data.ActiveUser.Id;
+            _EditedById = Data.ActiveUser.Id;
         }
 
         public Guid Id { get { return _Id; } }
         public Guid BugId { get { return _BugId; } }
-        public User CreatedBy { get { return _CreatedBy; } }
+        public User CreatedBy
+        {
+            get
+            {
+                bool has = Data.Users.Any(user => user.Id.ToString() == _CreatedById.ToString());
+                return Data.Users.Single(user => user.Id.ToString() == _CreatedById.ToString());
+            }
+        }
         public DateTime DateTimeCreated { get { return _DateTimeCreated; } }
-        public User EditedBy { get; }
+        public User EditedBy
+        {
+            get
+            {
+                bool has = Data.Users.Any(user => user.Id.ToString() == _EditedById.ToString());
+                return Data.Users.Single(user => user.Id.ToString() == _EditedById.ToString());
+            }
+        }
+
         public DateTime DateTimeEdited { get { return _DateTimeEdited; } }
         public string Title
         {
@@ -139,9 +166,9 @@ namespace BTS_Class_Library
                             "@CreatedById, @DateTimeCreated, @EditedById, @DateTimeEdited, @Title, @Body);", conn);
                             CreateNote.Parameters.Add(new SqlParameter("Id", _Id));
                             CreateNote.Parameters.Add(new SqlParameter("BugId", _BugId));
-                            CreateNote.Parameters.Add(new SqlParameter("CreatedById", _CreatedBy.Id));
+                            CreateNote.Parameters.Add(new SqlParameter("CreatedById", _CreatedById));
                             CreateNote.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
-                            CreateNote.Parameters.Add(new SqlParameter("EditedById", _EditedBy.Id));
+                            CreateNote.Parameters.Add(new SqlParameter("EditedById", _EditedById));
                             CreateNote.Parameters.Add(new SqlParameter("DateTimeEdited", _DateTimeEdited));
                             CreateNote.Parameters.Add(new SqlParameter("Title", _Title));
                             CreateNote.Parameters.Add(new SqlParameter("Body", _Body));
@@ -203,9 +230,9 @@ namespace BTS_Class_Library
                         "@DateTimeCreated, @EditedById, @DateTimeEdited, @Title, @Body, @Uploaded);", conn);
                         CreateNote.Parameters.Add(new SqlParameter("Id", _Id));
                         CreateNote.Parameters.Add(new SqlParameter("BugId", _BugId));
-                        CreateNote.Parameters.Add(new SqlParameter("CreatedById", _CreatedBy.Id));
+                        CreateNote.Parameters.Add(new SqlParameter("CreatedById", _CreatedById));
                         CreateNote.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
-                        CreateNote.Parameters.Add(new SqlParameter("EditedById", _EditedBy.Id));
+                        CreateNote.Parameters.Add(new SqlParameter("EditedById", _EditedById));
                         CreateNote.Parameters.Add(new SqlParameter("DateTimeEdited", _DateTimeEdited));
                         CreateNote.Parameters.Add(new SqlParameter("Title", _Title));
                         CreateNote.Parameters.Add(new SqlParameter("Body", _Body));
@@ -233,7 +260,7 @@ namespace BTS_Class_Library
             AppLog.Info("UPDATE NOTE - Starting...");
 
             _DateTimeEdited = DateTime.Now;
-            _EditedBy = Data.ActiveUser;
+            _EditedById = Data.ActiveUser.Id;
 
             if (!Data.OfflineMode)
             {
@@ -251,7 +278,7 @@ namespace BTS_Class_Library
                         SqlCommand UpdateNote = new SqlCommand("UPDATE t_Notes SET EditedById = @EditedById, " +
                             "DateTimeEdited = @DateTimeEdited, Title = @Title, Body = @Body WHERE Id = @Id", conn);
                         UpdateNote.Parameters.Add(new SqlParameter("Id", _Id));
-                        UpdateNote.Parameters.Add(new SqlParameter("EditedById", _EditedBy.Id));
+                        UpdateNote.Parameters.Add(new SqlParameter("EditedById", _EditedById));
                         UpdateNote.Parameters.Add(new SqlParameter("DateTimeEdited", _DateTimeEdited));
                         UpdateNote.Parameters.Add(new SqlParameter("Title", _Title));
                         UpdateNote.Parameters.Add(new SqlParameter("Body", _Body));
@@ -285,7 +312,7 @@ namespace BTS_Class_Library
                     SqlCommand UpdateNote = new SqlCommand("UPDATE Notes SET EditedById = @EditedById, " +
                         "DateTimeEdited = @DateTimeEdited, Title = @Title, Body = @Body WHERE Id = @Id", conn);
                     UpdateNote.Parameters.Add(new SqlParameter("Id", _Id));
-                    UpdateNote.Parameters.Add(new SqlParameter("EditedById", _EditedBy.Id));
+                    UpdateNote.Parameters.Add(new SqlParameter("EditedById", _EditedById));
                     UpdateNote.Parameters.Add(new SqlParameter("DateTimeEdited", _DateTimeEdited));
                     UpdateNote.Parameters.Add(new SqlParameter("Title", _Title));
                     UpdateNote.Parameters.Add(new SqlParameter("Body", _Body));
@@ -327,9 +354,9 @@ namespace BTS_Class_Library
                             while (reader.Read())
                             {
                                 _BugId = new Guid(reader[1].ToString());
-                                _CreatedBy = new User(new Guid(reader[2].ToString()));
+                                _CreatedById = new Guid(reader[2].ToString());
                                 _DateTimeCreated = Convert.ToDateTime(reader[3]);
-                                _EditedBy = new User(new Guid(reader[4].ToString()));
+                                _EditedById = new Guid(reader[4].ToString());
                                 _DateTimeEdited = Convert.ToDateTime(reader[5]);
                                 _Title = reader[6].ToString();
                                 _Body = reader[7].ToString();
@@ -367,9 +394,9 @@ namespace BTS_Class_Library
                             while (reader.Read())
                             {
                                 _BugId = new Guid(reader[1].ToString());
-                                _CreatedBy = new User(new Guid(reader[2].ToString()));
+                                _CreatedById = new Guid(reader[2].ToString());
                                 _DateTimeCreated = Convert.ToDateTime(reader[3]);
-                                _EditedBy = new User(new Guid(reader[4].ToString()));
+                                _EditedById = new Guid(reader[4].ToString());
                                 _DateTimeEdited = Convert.ToDateTime(reader[5]);
                                 _Title = reader[6].ToString();
                                 _Body = reader[7].ToString();

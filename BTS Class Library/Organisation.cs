@@ -48,19 +48,19 @@ namespace BTS_Class_Library
                 int i = 0;
                 foreach (OrgMember TempOrgMember in Data.OrgMembers)
                 {
-                    AppLog.Debug(String.Format("{2} Data.OrgMembers[{0}].FullName = {1}", i, TempOrgMember.MyUser.FullName, InfoPrefix));
+                    //AppLog.Debug(String.Format("{2} Data.OrgMembers[{0}].FullName = {1}", i, TempOrgMember.MyUser.FullName, InfoPrefix));
                     if (TempOrgMember.OrgId.ToString() == Id.ToString())
                     {
-                        AppLog.Debug(InfoPrefix + " BEN!!! TempOrgMember.OrgId.ToString() == Id.ToString()");
-                        AppLog.Debug(String.Format("{2} BEN!!! {0} == {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
-                        AppLog.Debug(String.Format("{2} BEN!!! {0} IS a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
+                        //AppLog.Debug(InfoPrefix + " BEN!!! TempOrgMember.OrgId.ToString() == Id.ToString()");
+                        //AppLog.Debug(String.Format("{2} BEN!!! {0} == {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
+                        //AppLog.Debug(String.Format("{2} BEN!!! {0} IS a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
                         TempOrgMembers.Add(TempOrgMember);
                     }
                     else
                     {
-                        AppLog.Debug(InfoPrefix + "BEN!!! TempOrgMember.OrgId.ToString() != Id.ToString()");
-                        AppLog.Debug(String.Format("{2} BEN!!! {0} != {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
-                        AppLog.Debug(String.Format("{2} BEN!!! {0} IS not a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
+                        //AppLog.Debug(InfoPrefix + "BEN!!! TempOrgMember.OrgId.ToString() != Id.ToString()");
+                        //AppLog.Debug(String.Format("{2} BEN!!! {0} != {1}", TempOrgMember.OrgId.ToString(), Id.ToString(), InfoPrefix));
+                        //AppLog.Debug(String.Format("{2} BEN!!! {0} IS not a member of {1}", TempOrgMember.MyUser.FullName, TempOrgMember.OrgId, InfoPrefix));
                     }
                     i++;
                 }
@@ -103,6 +103,13 @@ namespace BTS_Class_Library
         public Organisation(Guid pId)
         {
             _Id = pId;
+        }
+
+        public Organisation(Guid pId, string pName, DateTime pDateTimeCreated)
+        {
+            _Id = pId;
+            _Name = pName;
+            _DateTimeCreated = pDateTimeCreated;
         }
 
         public Organisation()
@@ -359,6 +366,8 @@ namespace BTS_Class_Library
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
+                        //Moved to Data.Initialise
+                        /*
                         AppLog.Info("GET ORG - Attempting to open connection to local database...");
                         conn.Open();
                         AppLog.Info("GET ORG - Connection to local database opened successfully");
@@ -383,7 +392,7 @@ namespace BTS_Class_Library
                             }
                         }
                         AppLog.Info(String.Format("GET ORG - Organisation {0} downloaded from local database successfully",
-                       _Name));
+                       _Name));*/
                     }
                 }
                 catch (SqlException e)
@@ -608,7 +617,7 @@ namespace BTS_Class_Library
 
         public OrgMember NewOrgMember(User pUser)
         {
-            return new OrgMember(pUser, this);
+            return new OrgMember(pUser.Id, this.Id);
         }
 
         public Product NewProduct()

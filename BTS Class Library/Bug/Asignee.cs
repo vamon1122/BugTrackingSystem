@@ -12,7 +12,7 @@ namespace BTS_Class_Library
     public class Assignee
     {
         private Guid _BugId;
-        private User _MyUser;
+        private Guid _UserId;
         private TimeSpan _TimeSpent;
         private int _AccessLevel;
         private DateTime _DateTimeCreated;
@@ -20,7 +20,16 @@ namespace BTS_Class_Library
         private string _ErrMsg;
 
         public Guid BugId { get { return _BugId; } }
-        public User MyUser { get { return _MyUser; } }
+
+        public User MyUser
+        {
+            get
+            {
+                bool has = Data.Users.Any(user => user.Id.ToString() == _UserId.ToString());
+                return Data.Users.Single(user => user.Id.ToString() == _UserId.ToString());
+            }
+        }
+
         public TimeSpan TimeSpent { get { return _TimeSpent; } set { Uploaded = false; _TimeSpent += value; } }
         public int AccessLevel { get { return _AccessLevel; } set { Uploaded = false; AccessLevel = value; } }
         public DateTime DateTimeCreated { get { return _DateTimeCreated; } }
@@ -30,10 +39,19 @@ namespace BTS_Class_Library
 
 
 
+        public Assignee(Guid pBugId, Guid pUserId, int pTimeSpent, int pAccessLevel, DateTime pDateTimeCreated)
+        {
+            _BugId = pBugId;
+            _UserId = pUserId;
+            //_TimeSpent = pTimeSpent;
+            _AccessLevel = pAccessLevel;
+            _DateTimeCreated = pDateTimeCreated;
+        }
+
         public Assignee(Bug pBug, User pUser)
         {
             _BugId = pBug.Id;
-            _MyUser = pUser;
+            _UserId = pUser.Id;
         }
 
         public bool Create()
@@ -95,7 +113,7 @@ namespace BTS_Class_Library
                                                         "@UserId, @TimeSpent, @AccessLevel, @DateTimeCreated);", conn);
 
                             CreateAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                            CreateAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                            CreateAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
                             CreateAssignee.Parameters.Add(new SqlParameter("TimeSpent", _TimeSpent.Ticks));
                             CreateAssignee.Parameters.Add(new SqlParameter("Accesslevel", _AccessLevel));
                             CreateAssignee.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
@@ -103,7 +121,7 @@ namespace BTS_Class_Library
                             CreateAssignee.ExecuteNonQuery();
                             Uploaded = true;
                             AppLog.Info(String.Format("CREATE ASSIGNEE - Assignee {0} created on online database successfully",
-                            _MyUser.Username));
+                            MyUser.Username));
                         } 
                         
                     }
@@ -164,7 +182,7 @@ namespace BTS_Class_Library
                         "@TimeSpent, @AccessLevel, @DateTimeCreated, @Uploaded);", conn);
 
                         CreateAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                        CreateAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        CreateAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
                         CreateAssignee.Parameters.Add(new SqlParameter("TimeSpent", _TimeSpent.Ticks));
                         CreateAssignee.Parameters.Add(new SqlParameter("Accesslevel", _AccessLevel));
                         CreateAssignee.Parameters.Add(new SqlParameter("DateTimeCreated", _DateTimeCreated));
@@ -173,7 +191,7 @@ namespace BTS_Class_Library
                         CreateAssignee.ExecuteNonQuery();
 
                         AppLog.Info(String.Format("CREATE ASSIGNEE - Assignee {0} created on local database successfully",
-                    _MyUser.Username));
+                    MyUser.Username));
                     }
                     
                 }
@@ -209,7 +227,7 @@ namespace BTS_Class_Library
                         SqlCommand UpdateAssignee = new SqlCommand("UPDATE t_Assignees SET TimeSpent = " +
                             "@TimeSpent, AccessLevel = @AccessLevel WHERE BugId = @BugId AND UserId = @UserId;", conn);
                         UpdateAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                        UpdateAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        UpdateAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
                         UpdateAssignee.Parameters.Add(new SqlParameter("TimeSpent", _TimeSpent.Ticks));
                         UpdateAssignee.Parameters.Add(new SqlParameter("Accesslevel", _AccessLevel));
 
@@ -217,7 +235,7 @@ namespace BTS_Class_Library
                     }
                     Uploaded = true;
                     AppLog.Info(String.Format("UPDATE ASSIGNEE - Assignee {0} updated on online database " +
-                    "successfully", _MyUser.Username));
+                    "successfully", MyUser.Username));
                 }
                 catch (SqlException e)
                 {
@@ -244,14 +262,14 @@ namespace BTS_Class_Library
                     SqlCommand UpdateAssignee = new SqlCommand("UPDATE Assignees SET TimeSpent = @TimeSpent, " +
                         "AccessLevel = @AccessLevel WHERE BugId = @BugId AND UserId = @UserId;", conn);
                     UpdateAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                    UpdateAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    UpdateAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
                     UpdateAssignee.Parameters.Add(new SqlParameter("TimeSpent", _TimeSpent.Ticks));
                     UpdateAssignee.Parameters.Add(new SqlParameter("Accesslevel", _AccessLevel));
 
                     UpdateAssignee.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("UPDATE ASSIGNEE - Assignee {0} updated on local database successfully",
-                _MyUser.FullName));
+                MyUser.FullName));
             }
             catch (SqlException e)
             {
@@ -284,7 +302,7 @@ namespace BTS_Class_Library
                         SqlCommand GetAssignee = new SqlCommand("SELECT * FROM Assignees WHERE BugId = @BugId AND " +
                             "UserId = UserId;", conn);
                         GetAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                        GetAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        GetAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                         using (SqlDataReader reader = GetAssignee.ExecuteReader())
                         {
@@ -322,7 +340,7 @@ namespace BTS_Class_Library
                         SqlCommand GetAssignee = new SqlCommand("SELECT * FROM t_Assignees WHERE BugId = " +
                             "@BugId AND UserId = UserId;", conn);
                         GetAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                        GetAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                        GetAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                         using (SqlDataReader reader = GetAssignee.ExecuteReader())
                         {
@@ -335,7 +353,7 @@ namespace BTS_Class_Library
                         }
                     }
                     AppLog.Info(String.Format("GET ASSIGNEE - Assignee {0} downloaded from online database " +
-                        "successfully", _MyUser.Username));
+                        "successfully", MyUser.Username));
                 }
                 catch (SqlException e)
                 {
@@ -418,12 +436,12 @@ namespace BTS_Class_Library
                     SqlCommand DeleteAssignee = new SqlCommand("DELETE FROM t_Assignees WHERE BugId = @BugId " +
                         "AND UserId = @UserId;", conn);
                     DeleteAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                    DeleteAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    DeleteAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                     DeleteAssignee.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("DELETE ASSIGNEE - <Class> {0} deleted from online database successfully",
-                    _MyUser.Username));
+                    MyUser.Username));
             }
             catch (SqlException e)
             {
@@ -444,12 +462,12 @@ namespace BTS_Class_Library
                     SqlCommand DeleteAssignee = new SqlCommand("DELETE FROM Assignees WHERE BugId = @BugId AND " +
                         "UserId = @UserId;", conn);
                     DeleteAssignee.Parameters.Add(new SqlParameter("BugId", _BugId));
-                    DeleteAssignee.Parameters.Add(new SqlParameter("UserId", _MyUser.Id));
+                    DeleteAssignee.Parameters.Add(new SqlParameter("UserId", _UserId));
 
                     DeleteAssignee.ExecuteNonQuery();
                 }
                 AppLog.Info(String.Format("DELETE ASSIGNEE - Assignee {0} deleted from local database successfully",
-                    _MyUser.Username));
+                    MyUser.Username));
             }
             catch (SqlException e)
             {

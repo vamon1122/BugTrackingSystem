@@ -20,6 +20,7 @@ namespace BTS_Class_Library
         internal static List<Product> Products = new List<Product>();
         internal static List<OrgMember> OrgMembers = new List<OrgMember>();
         internal static List<Organisation> Organisations = new List<Organisation>();
+        internal static List<User> Users = new List<User>();
     }
 
     public static class Data
@@ -69,7 +70,7 @@ namespace BTS_Class_Library
 
         public static void AddOrgMember(OrgMember pOrgMember)
         {
-            AppLog.Debug(String.Format("BEN3 Data.OrgMembers.Add({0} Org: {1} User: {2})", pOrgMember.MyUser.FullName, pOrgMember.OrgId, pOrgMember.MyUser.Id));
+            AppLog.Debug(String.Format("BEN3 Data.OrgMembers.Add(OrgId: {0} UserId: {1})", pOrgMember.OrgId, pOrgMember.UserId));
             PrivateData.OrgMembers.Add(pOrgMember);
         }
 
@@ -82,6 +83,15 @@ namespace BTS_Class_Library
         }
 
         public static List<Organisation> Organisations { get { return PrivateData.Organisations; } }
+
+        public static void AddUser(User pUser)
+        {
+            AppLog.Debug(String.Format("BEN2 Data.Users.Add({0})", pUser.FullName));
+            PrivateData.Users.Add(pUser);
+        }
+
+        public static List<User> Users { get { return PrivateData.Users; } }
+
 
         #endregion
 
@@ -125,6 +135,308 @@ namespace BTS_Class_Library
         public static string InitialiseProgress;
 
         public static void Initialise()
+        {
+            using (SqlConnection conn = new SqlConnection(Data.OnlineConnStr))
+            {
+                conn.Open();
+
+                GetUserOrgs();
+                GetOrgMembers();
+                GetOrgMemberUsers();
+                GetOrgTagTypes();
+                GetOrgProducts();
+                GetOrgBugs();
+                GetBugAssignees();
+                GetBugTags();
+                GetBugNotes();
+
+                bool GetUserOrgs()
+                {
+
+                    SqlCommand SelectUsersOrgMembersips = new SqlCommand("SELECT OrgId FROM t_OrgMembers WHERE " +
+                        "UserId = @UserId", conn);
+
+                    SelectUsersOrgMembersips.Parameters.Add(new SqlParameter("UserId", ActiveUser.Id));
+
+                    int NoOfOrgMemberships = 0;
+                    List<Guid> UsersOrgIds = new List<Guid>();
+
+                    using (SqlDataReader UsersOrgMembershipsReader = SelectUsersOrgMembersips.ExecuteReader())
+                    {
+                        while (UsersOrgMembershipsReader.Read())
+                        {
+                            NoOfOrgMemberships++;
+                            UsersOrgIds.Add(Guid.Parse(UsersOrgMembershipsReader[0].ToString()));
+                        }
+                    }
+
+                    AppLog.Debug(String.Format("{0} is a member of {1} organisation(s). Attempting to download these organisations...", ActiveUser.FullName, NoOfOrgMemberships));
+
+                    int NoOfOrgsDownloaded = 0;
+
+                    foreach (Guid UserOrgId in UsersOrgIds)
+                    {
+                        SqlCommand SelectOrganisations = new SqlCommand("SELECT * FROM t_Organisations WHERE Id = @Id;", conn);
+                        SelectOrganisations.Parameters.Add(new SqlParameter("Id", UserOrgId.ToString()));
+
+                        Organisation TempOrg;
+
+                        using (SqlDataReader OrgReader = SelectOrganisations.ExecuteReader())
+                        {
+                            if (OrgReader.Read())
+                            {
+                                AddOrganisation(new Organisation(new Guid(UserOrgId.ToString()), OrgReader[1].ToString().Trim(), Convert.ToDateTime(OrgReader[2])));
+                                NoOfOrgsDownloaded++;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+
+                    AppLog.Debug(String.Format("Success! The {0}/{1} of the organisations which {2} is a member of were downloaded.", NoOfOrgsDownloaded, NoOfOrgMemberships, ActiveUser.FullName));
+                    return true;
+                }
+
+                bool GetOrgMembers()
+                {
+                    foreach (Organisation org in Organisations)
+                    {
+                        SqlCommand GetOrganisationMembers = new SqlCommand("SELECT * FROM t_OrgMembers WHERE OrgId = @OrgId", conn);
+                        GetOrganisationMembers.Parameters.Add(new SqlParameter("OrgId", org.Id));
+
+                        int NoOfOrgMembersDownloaded = 0;
+
+                        using (SqlDataReader ReadOrgansiationMembers = GetOrganisationMembers.ExecuteReader())
+                        {
+                            while (ReadOrgansiationMembers.Read())
+                            {
+                                AddOrgMember(new OrgMember(Guid.Parse(ReadOrgansiationMembers[1].ToString()), org.Id, Convert.ToDateTime(ReadOrgansiationMembers[2])));
+                            }
+                        }
+                        NoOfOrgMembersDownloaded++;
+                        AppLog.Debug(String.Format("Found {0} member(s) of {1}", NoOfOrgMembersDownloaded, org.Name));
+                    }
+                    return true;
+                }
+
+                bool GetOrgMemberUsers()
+                {
+                    foreach (OrgMember orgmemb in OrgMembers)
+                    {
+                        SqlCommand GetUsers = new SqlCommand("SELECT * FROM t_Users WHERE Id = @UserId", conn);
+                        GetUsers.Parameters.Add(new SqlParameter("UserId", orgmemb.UserId));
+
+                        int NoOfOrgMemberUsersDownloaded = 0;
+
+                        using (SqlDataReader ReadOrgansiationMemberUsers = GetUsers.ExecuteReader())
+                        {
+                            while (ReadOrgansiationMemberUsers.Read())
+                            {
+                                User TempUser = new User(new Guid(ReadOrgansiationMemberUsers[0].ToString()), ReadOrgansiationMemberUsers[1].ToString(), ReadOrgansiationMemberUsers[2].ToString(), ReadOrgansiationMemberUsers[5].ToString(), ReadOrgansiationMemberUsers[6].ToString(), ReadOrgansiationMemberUsers[7].ToString(), ReadOrgansiationMemberUsers[8].ToString(), Convert.ToDateTime(ReadOrgansiationMemberUsers[12]));
+                                
+
+                                if (ReadOrgansiationMemberUsers[3] != DBNull.Value)
+                                {
+                                    TempUser.DOB = Convert.ToDateTime(ReadOrgansiationMemberUsers[3]);
+                                }
+
+                                if (ReadOrgansiationMemberUsers[4] != DBNull.Value)
+                                {
+                                    TempUser.Gender = ReadOrgansiationMemberUsers[4].ToString().ToCharArray()[0];
+                                }
+
+                                if (ReadOrgansiationMemberUsers[9] != DBNull.Value)
+                                {
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[9].ToString();
+                                }
+
+                                if (ReadOrgansiationMemberUsers[10] != DBNull.Value)
+                                {
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[10].ToString();
+                                }
+
+                                if (ReadOrgansiationMemberUsers[11] != DBNull.Value)
+                                {
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[11].ToString();
+                                }
+
+                                if(Data.Users.Any(user => user.Id.ToString() == TempUser.Id.ToString()))
+                                {
+                                    AppLog.Debug("Temp user already exists!!!");
+                                }
+                                else
+                                {
+                                    AddUser(TempUser);
+                                }
+                            }
+                        }
+                        NoOfOrgMemberUsersDownloaded++;
+                        AppLog.Debug(String.Format("Found {0} users(s)", NoOfOrgMemberUsersDownloaded));
+                    }
+                    AppLog.Debug("There are " + Data.Users.Count() + "users!");
+                    return true;
+                }
+
+                bool GetOrgTagTypes()
+                {
+                    foreach (Organisation org in Organisations)
+                    {
+                        SqlCommand GetTagTypes = new SqlCommand("SELECT * FROM t_TagTypes WHERE OrgId = @OrgId", conn);
+                        GetTagTypes.Parameters.Add(new SqlParameter("OrgId", org.Id));
+
+                        int NoOfDownloadedTagTypes = 0;
+
+                        using (SqlDataReader ReadTagTypes = GetTagTypes.ExecuteReader())
+                        {
+                            while (ReadTagTypes.Read())
+                            {
+                                AppLog.Debug(String.Format("{0} == {1}", org.Id, ReadTagTypes[1].ToString()));
+                                AppLog.Debug(String.Format("Id= " + ReadTagTypes[0].ToString()));
+                                AppLog.Debug("OrgId = " + ReadTagTypes[2].ToString());
+
+                                AddTagType(new TagType(new Guid(ReadTagTypes[0].ToString()), org.Id, ReadTagTypes[2].ToString()));
+                                NoOfDownloadedTagTypes++;
+                            }
+                        }
+                        AppLog.Debug(String.Format("Found {0} tagtypes(s) for {1}", NoOfDownloadedTagTypes, org.Name));
+                    }
+                    return true;
+                }
+
+                bool GetOrgProducts()
+                {
+                    foreach (Organisation org in Organisations)
+                    {
+                        int NoOfDownloadedProducts = 0;
+
+                        SqlCommand GetProducts = new SqlCommand("SELECT * FROM t_Products WHERE OrgId = @OrgId", conn);
+                        GetProducts.Parameters.Add(new SqlParameter("OrgId", org.Id));
+
+                        using (SqlDataReader ProductReader = GetProducts.ExecuteReader())
+                        {
+                            while (ProductReader.Read())
+                            {
+                                AddProduct(new Product(new Guid(ProductReader[0].ToString()), org.Id, ProductReader[2].ToString()));
+                                NoOfDownloadedProducts++;
+                            }
+                        }
+                        AppLog.Debug(String.Format("Found {0} products(s) for {1}", NoOfDownloadedProducts, org.Name));
+                    }
+                    return true;
+                }
+
+                bool GetOrgBugs()
+                {
+                    foreach(Product prod in Products)
+                    {
+                        SqlCommand GetBugs = new SqlCommand("SELECT * FROM t_Bugs WHERE ProductId = @ProductId", conn);
+                        GetBugs.Parameters.Add(new SqlParameter("ProductId", prod.Id));
+
+                        using (SqlDataReader reader = GetBugs.ExecuteReader())
+                        {
+                            int NoOfDownloadedBugs = 0;
+                            while (reader.Read())
+                            {
+                                Bug TempBug = new Bug(new Guid(reader[0].ToString()), new Guid(reader[1].ToString()), new Guid(reader[2].ToString()), reader[3].ToString(), "", Convert.ToInt32(reader[5]), Convert.ToDateTime(reader[6]), DateTime.MinValue, Convert.ToDateTime(reader[8]), new Guid(reader[9].ToString()));
+                                
+                                if(reader[4] != DBNull.Value)
+                                {
+                                    TempBug.Description = reader[4].ToString();
+                                }
+
+                                /*if (reader[7] != DBNull.Value)
+                                {
+                                    TempBug.ResolvedDateTime = reader[7].ToString();
+                                }*/
+
+                                AddBug(TempBug);
+                                NoOfDownloadedBugs++;
+                            }
+                            AppLog.Debug(String.Format("Found {0} bug(s) for {1}", NoOfDownloadedBugs, prod.Name));
+                        }
+                    }
+                    return true;
+                }
+
+                bool GetBugAssignees()
+                {
+                    foreach (Bug mybug in Bugs)
+                    {
+                        SqlCommand DownloadBug_Assignees = new SqlCommand("SELECT * FROM t_Assignees WHERE " +
+                            "BugId = @BugId", conn);
+                        DownloadBug_Assignees.Parameters.Add(new SqlParameter("BugId", mybug.Id));
+
+                        using (SqlDataReader reader = DownloadBug_Assignees.ExecuteReader())
+                        {
+                            int NoOfDownloadedAssignees = 0;
+                            while (reader.Read())
+                            {
+                                Assignee TempAssignee = new Assignee(new Guid(reader[0].ToString()), new Guid(reader[1].ToString()), Convert.ToInt16(reader[2]), Convert.ToInt16(reader[3]), Convert.ToDateTime(reader[4]));
+
+                                AddAssignee(TempAssignee);
+                                NoOfDownloadedAssignees++;
+                            }
+                            AppLog.Debug(String.Format("Found {0} assignees(s) for {1}", NoOfDownloadedAssignees, mybug.Title));
+                        }
+                        
+                    }
+                    return true;
+                }
+
+                bool GetBugTags()
+                {
+                    foreach (Bug mybug in Bugs)
+                    {
+                        SqlCommand DownloadBug_Tags = new SqlCommand("SELECT * FROM t_Tags WHERE BugId = @BugId",
+                            conn);
+
+                        int NoOfDownloadedTags = 0;
+
+                        DownloadBug_Tags.Parameters.Add(new SqlParameter("BugId", mybug.Id));
+                        using (SqlDataReader reader = DownloadBug_Tags.ExecuteReader())
+                        {
+                            
+                            while (reader.Read())
+                            {
+                                Tag TempTag = new Tag(new Guid(reader[0].ToString()), mybug.Id, Convert.ToDateTime(reader[2]), new Guid(reader[3].ToString()));
+                                
+                                AddTag(TempTag);
+                                NoOfDownloadedTags++;
+                            }
+                        }
+                        AppLog.Debug(String.Format("Found {0} tag(s) for {1}", NoOfDownloadedTags, mybug.Title));
+                    }
+                    return true;
+                }
+
+                bool GetBugNotes()
+                {
+                    foreach (Bug mybug in Bugs)
+                    {
+                        SqlCommand DownloadBug_Notes = new SqlCommand("SELECT * FROM t_Notes WHERE BugId = @BugId", conn);
+                        DownloadBug_Notes.Parameters.Add(new SqlParameter("BugId", mybug.Id));
+
+                        int NoOfDownloadedNotes = 0;
+
+                        using (SqlDataReader reader = DownloadBug_Notes.ExecuteReader())
+                        {
+                            
+                            while (reader.Read())
+                            {
+                                AddNote(new Note(new Guid(reader[0].ToString()), new Guid(reader[1].ToString()), new Guid(reader[2].ToString()), Convert.ToDateTime(reader[3]), new Guid(reader[4].ToString()), Convert.ToDateTime(reader[5].ToString()), reader[6].ToString(), reader[7].ToString()));
+                                NoOfDownloadedNotes++;
+                            }
+                        }
+                        AppLog.Debug(String.Format("Found {0} notes(s) for {1}", NoOfDownloadedNotes, mybug.Title));
+                    }
+                    return true;
+                }
+            }
+        }
+
+        public static void OLDInitialise()
         {
             /////Get active user's organisations start/////
             {
@@ -322,7 +634,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading user for organisation: " + TempUser.ErrMsg;
                                         
                                     }
-                                    OrgMember TempOrgMember = new OrgMember(TempUser, TempOrg);
+                                    OrgMember TempOrgMember = new OrgMember(TempUser.Id, TempOrg.Id);
                                     if (!TempOrgMember.Get())
                                     {
                                         //_ErrMsg = "Error while downloading OrgMember for organisation: " + TempOrgMember.ErrMsg;
@@ -355,7 +667,7 @@ namespace BTS_Class_Library
                                         //_ErrMsg = "Error while downloading user for organisation: " + TempUser.ErrMsg;
                                         
                                     }
-                                    OrgMember TempOrgMember = new OrgMember(TempUser, TempOrg);
+                                    OrgMember TempOrgMember = new OrgMember(TempUser.Id, TempOrg.Id);
                                     if (!TempOrgMember.Get())
                                     {
                                         //_ErrMsg = "Error while downloading OrgMember for organisation: " + TempOrgMember.ErrMsg;
