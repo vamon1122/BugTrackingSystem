@@ -28,6 +28,7 @@ namespace BTS_Class_Library
         #region Private Data
         public static void AddBug(Bug pBug)
         {
+            AppLog.Debug("Adding bug " + pBug.Title);
             PrivateData.Bugs.Add(pBug);
         }
 
@@ -70,7 +71,6 @@ namespace BTS_Class_Library
 
         public static void AddOrgMember(OrgMember pOrgMember)
         {
-            AppLog.Debug(String.Format("BEN3 Data.OrgMembers.Add(OrgId: {0} UserId: {1})", pOrgMember.OrgId, pOrgMember.UserId));
             PrivateData.OrgMembers.Add(pOrgMember);
         }
 
@@ -78,7 +78,6 @@ namespace BTS_Class_Library
 
         public static void AddOrganisation(Organisation pOrganisation)
         {
-            AppLog.Debug(String.Format("BEN2 Data.Organisations.Add({0})", pOrganisation.Name));
             PrivateData.Organisations.Add(pOrganisation);
         }
 
@@ -86,7 +85,6 @@ namespace BTS_Class_Library
 
         public static void AddUser(User pUser)
         {
-            AppLog.Debug(String.Format("BEN2 Data.Users.Add({0})", pUser.FullName));
             PrivateData.Users.Add(pUser);
         }
 
@@ -329,10 +327,13 @@ namespace BTS_Class_Library
 
                 bool GetOrgBugs()
                 {
+                    AppLog.Debug("BEN !!! Getting organisation's bugs");
                     foreach(Product prod in Products)
                     {
                         SqlCommand GetBugs = new SqlCommand("SELECT * FROM t_Bugs WHERE ProductId = @ProductId", conn);
                         GetBugs.Parameters.Add(new SqlParameter("ProductId", prod.Id));
+
+                        AppLog.Debug(String.Format("Searching for bugs for Product ({0} {1})", prod.Name.Trim(), prod.Id));
 
                         using (SqlDataReader reader = GetBugs.ExecuteReader())
                         {

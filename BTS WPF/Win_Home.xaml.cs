@@ -116,13 +116,20 @@ namespace BTS_WPF
             UiLog.Info("Attempting to update UI 'bugs' scroll viewer list from DATA 'bugs' list...");
             BugStack.Children.Clear();
 
+            UiLog.Debug(String.Format("There are {0} bugs in Data.Bugs", Data.Bugs.Count()));
+
+            int Matches = 0;
+
             foreach (Bug MyBug in Data.Bugs)
             {
                 if(MyBug.ProductId.ToString() == Data.ActiveProduct.Id.ToString())
                 {
                     BugStack.Children.Add(new Ctrl_Bug(MyBug,this));
+                    Matches++;
                 }
             }
+
+            UiLog.Debug(String.Format("{0} bugs were added to the stack", Matches));
 
             Mouse.OverrideCursor = null;
             UiLog.Info("Success! UI 'bugs' scroll viewer list was updated from DATA 'bugs' list");
