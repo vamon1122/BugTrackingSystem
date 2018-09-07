@@ -60,15 +60,9 @@ namespace BTS_WPF
 
             if (combo_ActiveOrg.SelectedValue != null)
             {
-                Organisation Temp = new Organisation(new Guid(combo_ActiveOrg.SelectedValue.ToString()));
-                if (Temp.Get())
-                {
-                    //MessageBox.Show("Success!", "Success");
-                }
-                else
-                {
-                    //MessageBox.Show(Temp.ErrMsg, "Error");
-                }
+                //Organisation Temp = new Organisation(new Guid(combo_ActiveOrg.SelectedValue.ToString()));
+                Organisation Temp = Data.Organisations.Single(org => org.Id.ToString() == combo_ActiveOrg.SelectedValue.ToString());
+
                 Data.ActiveOrg = Temp;
 
                 /*foreach(TagType MyTagType in Data.ActiveOrg.TagTypes)

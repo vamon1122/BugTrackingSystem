@@ -40,6 +40,13 @@ namespace BTS_Class_Library
         {
             get
             {
+                /*AppLog.Debug(String.Format("There are {0} organisations", Data.Organisations.Count));
+                foreach(Organisation org in Data.Organisations)
+                {
+                    AppLog.Debug(String.Format("Organisation name = {0}", org.Name));
+                }
+                AppLog.Debug(String.Format("OrgId = {0}", _OrgId));*/
+
                 bool has = Data.Organisations.Any(org => org.Id.ToString() == _OrgId.ToString());
                 return Data.Organisations.Single(org => org.Id.ToString() == _OrgId.ToString());
             }
