@@ -165,6 +165,7 @@ namespace BTS_Class_Library
             _RaisedById = pRaisedById;
             _Title = pTitle;
             _Description = pDescription;
+            _Severity = pSeverity;
             _DateTimeCreated = pDateTimeCreated;
             _DateTimeEdited = pDateTimeEdited;
             _EditedByUserId = pEditedByUserId;
