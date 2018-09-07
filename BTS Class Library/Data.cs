@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using BenLog;
 using System.Data.SqlClient;
 
-//if (!/*Some Function*/) { Data.Error(_ErrMsg); };
-
 namespace BTS_Class_Library
 {
     static class PrivateData
@@ -28,7 +26,6 @@ namespace BTS_Class_Library
         #region Private Data
         public static void AddBug(Bug pBug)
         {
-            AppLog.Debug("Adding bug " + pBug.Title);
             PrivateData.Bugs.Add(pBug);
         }
 
@@ -93,17 +90,21 @@ namespace BTS_Class_Library
 
         #endregion
 
-        //public static Log MyLog = 
-
         private static User _ActiveUser;
-        public static User ActiveUser { get { return _ActiveUser;
-            } set {
+
+        public static User ActiveUser {
+            get
+            {
+                return _ActiveUser;
+            }
+            set {
                 _ActiveOrg = null; /*This will also set ActiveProduct to null*/
                 _ActiveUser = value;
             }
         }
 
         private static Organisation _ActiveOrg;
+
         public static Organisation ActiveOrg { get { return _ActiveOrg; }
             set {
                 if (value == null) {
@@ -119,14 +120,6 @@ namespace BTS_Class_Library
         private static Product _ActiveProduct;
 
         public static Product ActiveProduct { get; set; }
-        /*public static List<Bug> ActiveProductBugList = new List<Bug>();
-        public static List<Tag> ActiveProductBugTagList = new List<Tag>();
-        public static List<Note> ActiveProductBugNoteList = new List<Note>();
-        public static List<TagType> ActiveOrgTagTypeList = new List<TagType>();*/
-
-        
-
-        
 
         public static bool OfflineMode = false;
 
@@ -134,9 +127,16 @@ namespace BTS_Class_Library
 
         public static void Initialise()
         {
+            if (!Data.Users.Any(user => user.Id.ToString() == _ActiveUser.Id.ToString()))
+            {
+                AddUser(_ActiveUser);
+            }
+
             using (SqlConnection conn = new SqlConnection(Data.OnlineConnStr))
             {
                 conn.Open();
+
+
 
                 GetUserOrgs();
                 GetOrgMembers();
@@ -232,8 +232,7 @@ namespace BTS_Class_Library
                         {
                             while (ReadOrgansiationMemberUsers.Read())
                             {
-                                User TempUser = new User(new Guid(ReadOrgansiationMemberUsers[0].ToString()), ReadOrgansiationMemberUsers[1].ToString(), ReadOrgansiationMemberUsers[2].ToString(), ReadOrgansiationMemberUsers[5].ToString(), ReadOrgansiationMemberUsers[6].ToString(), ReadOrgansiationMemberUsers[7].ToString(), ReadOrgansiationMemberUsers[8].ToString(), Convert.ToDateTime(ReadOrgansiationMemberUsers[12]));
-                                
+                                User TempUser = new User(new Guid(ReadOrgansiationMemberUsers[0].ToString()), ReadOrgansiationMemberUsers[1].ToString().Trim(), ReadOrgansiationMemberUsers[2].ToString().Trim(), ReadOrgansiationMemberUsers[5].ToString().Trim(), ReadOrgansiationMemberUsers[6].ToString().Trim(), ReadOrgansiationMemberUsers[7].ToString().Trim(), ReadOrgansiationMemberUsers[8].ToString().Trim(), Convert.ToDateTime(ReadOrgansiationMemberUsers[12]));
 
                                 if (ReadOrgansiationMemberUsers[3] != DBNull.Value)
                                 {
@@ -247,24 +246,20 @@ namespace BTS_Class_Library
 
                                 if (ReadOrgansiationMemberUsers[9] != DBNull.Value)
                                 {
-                                    TempUser.Phone = ReadOrgansiationMemberUsers[9].ToString();
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[9].ToString().Trim();
                                 }
 
                                 if (ReadOrgansiationMemberUsers[10] != DBNull.Value)
                                 {
-                                    TempUser.Phone = ReadOrgansiationMemberUsers[10].ToString();
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[10].ToString().Trim();
                                 }
 
                                 if (ReadOrgansiationMemberUsers[11] != DBNull.Value)
                                 {
-                                    TempUser.Phone = ReadOrgansiationMemberUsers[11].ToString();
+                                    TempUser.Phone = ReadOrgansiationMemberUsers[11].ToString().Trim();
                                 }
 
-                                if(Data.Users.Any(user => user.Id.ToString() == TempUser.Id.ToString()))
-                                {
-                                    AppLog.Debug("Temp user already exists!!!");
-                                }
-                                else
+                                if(!Data.Users.Any(user => user.Id.ToString() == TempUser.Id.ToString()))
                                 {
                                     AddUser(TempUser);
                                 }
@@ -290,11 +285,7 @@ namespace BTS_Class_Library
                         {
                             while (ReadTagTypes.Read())
                             {
-                                AppLog.Debug(String.Format("{0} == {1}", org.Id, ReadTagTypes[1].ToString()));
-                                AppLog.Debug(String.Format("Id= " + ReadTagTypes[0].ToString()));
-                                AppLog.Debug("OrgId = " + ReadTagTypes[2].ToString());
-
-                                AddTagType(new TagType(new Guid(ReadTagTypes[0].ToString()), org.Id, ReadTagTypes[2].ToString()));
+                                AddTagType(new TagType(new Guid(ReadTagTypes[0].ToString()), org.Id, ReadTagTypes[2].ToString().Trim()));
                                 NoOfDownloadedTagTypes++;
                             }
                         }
@@ -437,42 +428,9 @@ namespace BTS_Class_Library
             }
         }
 
-        /*public static string DateTimeToSql(DateTime pDateTime)
-        {
-            string Day = pDateTime.ToString().Substring(0,2);
-            string Month = pDateTime.ToString().Substring(3,2);
-            string Year = pDateTime.ToString().Substring(6, 4);
-
-            Console.WriteLine(pDateTime);
-            Console.WriteLine("Day = " + Day);
-            Console.WriteLine("Month = " + Month);
-            Console.WriteLine("Year = " + Year);
-            string Time;
-
-            return "";
-        }*/
-
-        /*public static string OnlineConnStr = "Server=tcp:ben.database.windows.net,1433;Initial Catalog=BenDB;" +
-            "Persist Security Info=False;User ID=ben;Password=BBTbbt1704;MultipleActiveResultSets=False;" +
-            "Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            */
-
         public static string OnlineConnStr = "Server=198.38.83.33;Database=vamon112_bugtrackingsystem;Uid=vamon112_ben;Password=ccjO07JT";
-
-        //Home
-        /*
-        public static string LocalConnStr = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=\"D:\\Users\\benba" +
-            "\\My Documents\\Production\\Coding\\BugTrackingSystem\\Other Tests\\BTS_Local_Db.mdf\";Integrated Security=True";
-        */
-
-        //Work
-        /*public static string LocalConnStr = "Data Source = (LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\" +
-            "Ben\\Desktop\\BTS Class Lib + Con Test (Friday 5PM)\\BTS Class Library\\BTS_Local_Db.mdf\";" +
-            "Integrated Security = True";*/
 
         public static string LocalConnStr = "Data Source = (LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"" +
             AppDomain.CurrentDomain.BaseDirectory + "BTS_Local_Db.mdf\"; Integrated Security = True";
-
-        
     }
 }
