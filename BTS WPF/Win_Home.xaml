@@ -31,18 +31,16 @@
             />
 
         <Button 
+            Style="{StaticResource Button+Control}"
             x:Name="butt_NewOrg" 
             HorizontalAlignment="Left" 
             Margin="155,0,0,0" 
-            Width="30" 
-            Height="30" 
-            Content="+" 
-            FontSize="14"
-            VerticalContentAlignment="Center"
-            Padding="0" Click="butt_NewOrg_Click"
+            VerticalContentAlignment="Center" 
+            Click="butt_NewOrg_Click"
             />
 
         <Button 
+            Style="{StaticResource Button+Control}"
             x:Name="butt_EditOrg" 
             HorizontalAlignment="Left" 
             Margin="190,0,0,0" 
@@ -94,14 +92,10 @@
             />
 
         <Button 
+            Style="{StaticResource Button+Control}"
             x:Name="butt_NewProduct" 
             HorizontalAlignment="Left" 
             Grid.Row="1"
-            
-            Width="30" 
-            Height="30" 
-            Content="+" 
-            FontSize="14"
             VerticalContentAlignment="Center"
             Padding="0" Click="butt_NewProduct_Click" Margin="155,0,0,0"
             />
@@ -118,14 +112,10 @@
             />
 
         <Button 
+            Style="{StaticResource Button+Control}"
             x:Name="butt_NewBug" 
             HorizontalAlignment="Right" 
             Grid.Row="1"
-            
-            Width="30" 
-            Height="30" 
-            Content="+" 
-            FontSize="14"
             VerticalContentAlignment="Center"
             Padding="0" Click="butt_NewBug_Click" Margin="155,0,0,0"
             />

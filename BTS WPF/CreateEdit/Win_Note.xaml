@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="Note" Height="220" Width="300">
-    <Grid Background="AliceBlue" Margin="0,0,2,0">
+    <Grid Background="{StaticResource BackgroundBrush}" Margin="0,0,2,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"></ColumnDefinition>
             <ColumnDefinition Width="210"></ColumnDefinition>

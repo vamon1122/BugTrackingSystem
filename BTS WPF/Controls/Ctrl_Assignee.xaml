@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="90">
     <Grid>
-        <Button x:Name="butt_Assignee" Height="30" Width="90" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="butt_Assignee_Click"></Button>
+        <Button x:Name="butt_Assignee" Style="{StaticResource ButtonControlStyle}" Click="butt_Assignee_Click"></Button>
     </Grid>
 </UserControl>

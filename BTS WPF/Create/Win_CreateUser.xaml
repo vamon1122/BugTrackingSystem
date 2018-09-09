@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BTS_WPF"
         mc:Ignorable="d"
         Title="Create Account" Height="368.771" Width="362.589">
-    <Grid Background="AliceBlue" Margin="0,0,2,0">
+    <Grid Background="{StaticResource BackgroundBrush}" Margin="0,0,2,0">
         <Label Style="{StaticResource TitleStyle}" Content="Create Account" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="220" RenderTransformOrigin="-0.021,-1.045"/>
 
         <Label Content="Forename*" HorizontalAlignment="Left" Margin="49,65,0,0" VerticalAlignment="Top"/>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BTS_WPF"
         mc:Ignorable="d"
         Title="Assign Users" Height="100" Width="300">
-    <Grid>
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>

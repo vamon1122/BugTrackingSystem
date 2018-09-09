@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Closing="Win_Bug_Closing"
         Title="Bug" Height="620" Width="520">
-    <Grid Background="AliceBlue" Margin="0,0,0,0">
+    <Grid Background="{StaticResource BackgroundBrush}" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"></ColumnDefinition>
             <ColumnDefinition Width="410"></ColumnDefinition>
@@ -36,7 +36,7 @@
         <Label Content="Severity*" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="181,298,0,0" VerticalAlignment="Top" Width="75" Click="Cancel_Click" />
         <Button Content="Edit Bug" HorizontalAlignment="Left" Margin="261,298,0,0" VerticalAlignment="Top" Width="75" Click="Action_Click" IsDefault="True" RenderTransformOrigin="0.98,0.625"/>
-        <ComboBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" x:Name="combo_Severity" Height ="30" Width="50" FontSize="15" Margin="5,0,0,0">
+        <ComboBox Style="{StaticResource ComboStyle}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" x:Name="combo_Severity" Height ="30" Width="50" FontSize="15" Margin="5,0,0,0">
             <ComboBoxItem>1</ComboBoxItem>
             <ComboBoxItem>2</ComboBoxItem>
             <ComboBoxItem>3</ComboBoxItem>
@@ -46,19 +46,19 @@
         <ScrollViewer Grid.Row="5" Grid.Column="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="370" Margin="5,0,0,60" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal"  x:Name="NotesView" CanVerticallyScroll="False" CanHorizontallyScroll="True"></StackPanel>
         </ScrollViewer>
-        <Button Content="+" Click="AddNote_Click" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30" Width="30"  ></Button>
+        <Button Style="{StaticResource Button+Control}" HorizontalAlignment="Right" VerticalAlignment="Center" Click="AddNote_Click" Grid.Column="1" Grid.Row="5"  ></Button>
 
         <Label Content="Assignees" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ScrollViewer Grid.Row="6" Grid.Column="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="370" Margin="5,0,0,0">
             <StackPanel Orientation="Horizontal"  x:Name="AssigneesView" CanVerticallyScroll="False" CanHorizontallyScroll="True"></StackPanel>
         </ScrollViewer>
-        <Button Content="+" Click="AddAssignee_Click" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30" Width="30"></Button>
+        <Button Style="{StaticResource Button+Control}" Click="AddAssignee_Click" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" ></Button>
 
         <Label Content="Tags" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ScrollViewer Grid.Row="7" Grid.Column="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="370" Margin="5,0,0,0">
             <StackPanel Orientation="Horizontal"  x:Name="TagsView" CanVerticallyScroll="False" CanHorizontallyScroll="True"></StackPanel>
         </ScrollViewer>
-        <Button Content="+" Click="AddTag_Click" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30" Width="30"></Button>
+        <Button Style="{StaticResource Button+Control}" Click="AddTag_Click" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center"></Button>
 
         <Button Content="Delete" Grid.Row="8" Grid.Column="1" Click="Delete_Click" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ButtonStyle}" Margin="0,0,106,0" />
         <Button Content="Save Changes" Grid.Row="8" Grid.Column="1" Click="Update_Click" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ButtonStyle}" />

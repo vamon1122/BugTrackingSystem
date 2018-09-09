@@ -9,7 +9,7 @@
              >
 
     <Button Padding="0" Click="BugClicked" Width="390" Height="130" Margin="0,2.5,0,2.5">
-    <Grid Background="PowderBlue" Width="390" Height="130" Margin="0" >
+    <Grid Background="{StaticResource BackgroundBrush}" Width="390" Height="130" Margin="0" >
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="70"></RowDefinition>

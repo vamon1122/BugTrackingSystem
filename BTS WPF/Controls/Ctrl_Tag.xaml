@@ -5,11 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BTS_WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="90"
-             Height="30" Width="90"
-             Background="LightGreen">
-             
+             d:DesignHeight="30" d:DesignWidth="90">
+
     <Grid>
-        <Button x:Name="butt_Name" Height="30" Width="90" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="butt_Name_Click"></Button>
+        <Button x:Name="butt_Name" Style="{StaticResource ButtonControlStyle}" Click="butt_Name_Click"></Button>
     </Grid>
 </UserControl>

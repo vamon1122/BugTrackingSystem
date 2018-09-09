@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BTS_WPF"
         mc:Ignorable="d"
         Title="Create Tag" Height="189.743" Width="300">
-    <Grid>
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
