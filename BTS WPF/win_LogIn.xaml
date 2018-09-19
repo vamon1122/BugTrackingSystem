@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BTS_WPF"
         mc:Ignorable="d"
         Title="Log In" Height="350" Width="525">
-    <Grid Background="AliceBlue">
+    <Grid Background="{StaticResource BackgroundBrush}">
 
         <Label Style="{StaticResource TitleStyle}" Content="Log In" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="220" RenderTransformOrigin="-0.021,-1.045"/>
         <TextBox x:Name="input_UsernameOrEMail" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Margin="201,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.323,0.472"/>
@@ -15,7 +15,7 @@
         <Label Content="Username" HorizontalAlignment="Left" Margin="138,98,0,0" VerticalAlignment="Top"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="141,145,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Need to create an account? &#xD;&#xA;" HorizontalAlignment="Left" Margin="138,187,0,0" VerticalAlignment="Top"/>
-        <Button Content="Click here" HorizontalAlignment="Left" Margin="290,191,0,0" VerticalAlignment="Top" Width="59" Background="AliceBlue" BorderThickness="0" Click="CreateAccount_Click" FontWeight="Bold" Foreground="DarkBlue"/>
+        <Button Content="Click here" HorizontalAlignment="Left" Margin="290,191,0,0" VerticalAlignment="Top" Width="59" Background="{StaticResource BackgroundBrush}" BorderThickness="0" Click="CreateAccount_Click" FontWeight="Bold" Foreground="DarkBlue"/>
         <Label Content="to create an account" HorizontalAlignment="Left" Margin="345,187,0,0" VerticalAlignment="Top" Width="123" Height="30"/>
         <CheckBox x:Name="RememberMe" Content="Remember Me" HorizontalAlignment="Left" Margin="302,176,0,0" VerticalAlignment="Top" Unchecked="RememberMe_Unchecked"/>
     </Grid>

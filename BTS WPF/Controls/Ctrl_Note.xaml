@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="120"
              >
-    <Button Background="LightGoldenrodYellow" Click="EditNote_Click" Width="120" Height="120">
+    <Button Background="LightGoldenrodYellow" Click="EditNote_Click" Width="120" Height="120" Margin="0,0,4,0">
         <Grid Height="120" Width="120">
             <Label x:Name="Title" FontWeight="Bold">Title</Label>
         <TextBlock x:Name="Body" Grid.Row="1" TextWrapping="WrapWithOverflow" MaxHeight="110" Text="Body" TextTrimming="CharacterEllipsis" Margin="5,25,5,5"></TextBlock>

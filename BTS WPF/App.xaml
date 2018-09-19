@@ -69,7 +69,7 @@
         <!-- BUTTON CONTROL -->
         <Style x:Key="ButtonControlStyle" TargetType="Button">
             <Setter Property="Height" Value="30" />
-            <Setter Property="Margin" Value="2" />
+            <Setter Property="Margin" Value="0,0,4,0" />
             <Setter Property="Width" Value="90" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -135,7 +135,7 @@
             <Setter Property="Height" Value="30" />
             <Setter Property="Width" Value="30" />
             <Setter Property="Content" Value="+" />
-            <Setter Property="Background" Value="{StaticResource ControlBrush}" />
+            <!--<Setter Property="Background" Value="{StaticResource ControlBrush}" />-->
             <Setter Property="FontSize" Value="14" /> 
         </Style>
 
