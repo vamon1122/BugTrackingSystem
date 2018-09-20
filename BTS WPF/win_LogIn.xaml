@@ -18,5 +18,6 @@
         <Button Content="Click here" HorizontalAlignment="Left" Margin="290,191,0,0" VerticalAlignment="Top" Width="59" Background="{StaticResource BackgroundBrush}" BorderThickness="0" Click="CreateAccount_Click" FontWeight="Bold" Foreground="DarkBlue"/>
         <Label Content="to create an account" HorizontalAlignment="Left" Margin="345,187,0,0" VerticalAlignment="Top" Width="123" Height="30"/>
         <CheckBox x:Name="RememberMe" Content="Remember Me" HorizontalAlignment="Left" Margin="302,176,0,0" VerticalAlignment="Top" Unchecked="RememberMe_Unchecked"/>
+        <Label x:Name="AppVersLabel" Content="App Version Placeholder" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top" Width="123" Height="30" />
     </Grid>
 </Window>
