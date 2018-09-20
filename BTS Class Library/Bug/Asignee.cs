@@ -141,7 +141,7 @@ namespace BTS_Class_Library
                     "online database"));
             }
 
-            AppLog.Info("CREATE ASSIGNEE - Attempting to create assignee on local database...");
+            /*AppLog.Info("CREATE ASSIGNEE - Attempting to create assignee on local database...");
             try
             {
 
@@ -201,7 +201,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while creating assignee on local database. Changes were not saved";
                     AppLog.Error(_ErrMsg + ": " + e);
                     return false;
-            }
+            }*/
             AppLog.Info(String.Format("CREATE ASSIGNEE - Success!"));
             return true;
         }
@@ -250,7 +250,7 @@ namespace BTS_Class_Library
                 AppLog.Info("UPDATE ASSIGNEE - Offline mode is ON. Skipping update assignee on online database");
             }
 
-            AppLog.Info("UPDATE ASSIGNEE - Attempting to update assignee on local database...");
+            /*AppLog.Info("UPDATE ASSIGNEE - Attempting to update assignee on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -279,7 +279,7 @@ namespace BTS_Class_Library
                     AppLog.Error(_ErrMsg + ": " + e);
                     return false;
                 }
-            }
+            }*/
             AppLog.Info("UPDATE ASSIGNEE - Success!");
             return true;
         }
@@ -289,7 +289,7 @@ namespace BTS_Class_Library
             AppLog.Info("GET ASSIGNEE - Starting...");
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET ASSIGNEE - Attempting to get assignee from local database...");
+                /*AppLog.Info("GET ASSIGNEE - Attempting to get assignee from local database...");
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -323,7 +323,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting assignee from local database";
                     AppLog.Error("GET ASSIGNEE - " + _ErrMsg + ": " + e); ;
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -362,7 +362,7 @@ namespace BTS_Class_Library
                     return false;
                 }
                 //Finally, check if assignee exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!!
-                AppLog.Info("GET ASSIGNEE - Checking whether assignee exists in local database");
+                /*AppLog.Info("GET ASSIGNEE - Checking whether assignee exists in local database");
 
                 bool ExistsOnLocalDb;
 
@@ -415,7 +415,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET ASSIGNEE - Failed to create assignee: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
             }
             AppLog.Info("GET ASSIGNEE - Success!");
             return true;
@@ -450,7 +450,7 @@ namespace BTS_Class_Library
                 return false;
             }
 
-            AppLog.Info("DELETE ASSIGNEE - Attempting to delete assignee on local database...");
+            /*AppLog.Info("DELETE ASSIGNEE - Attempting to delete assignee on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -474,7 +474,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting assignee from local database";
                 AppLog.Error("DELETE ASSIGNEE - " + _ErrMsg + ": " + e); ;
                 return false;
-            }
+            }*/
             AppLog.Info("DELETE ASSIGNEE - Success!");
             return true;
         }

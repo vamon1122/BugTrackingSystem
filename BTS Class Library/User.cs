@@ -370,7 +370,7 @@ namespace BTS_Class_Library
 
             //If user is created on online database without throwing errors, 
             //try and create user offline
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -488,7 +488,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while creating user on local database. Changes were not saved";
                 AppLog.Error("CREATE USER - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
         
 
             AppLog.Info(String.Format("CREATE USER - Success!", _Username));
@@ -629,7 +629,7 @@ namespace BTS_Class_Library
             AffectedRows = 0;
 
             //If user has been updated on the online database successfully, update the local database
-            AppLog.Info("UPDATE USER - Attempting to update user on local database...");
+            /*AppLog.Info("UPDATE USER - Attempting to update user on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -718,7 +718,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating user on local database. Changes were not saved.";
                 AppLog.Error("UPDATE USER - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             return true;
         }
 
@@ -731,7 +731,7 @@ namespace BTS_Class_Library
             //If offline mode is on, cached user can be retrieved from the local database
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET USER - Offline mode is ON. Attempting to get user from local database...");
+                /*AppLog.Info("GET USER - Offline mode is ON. Attempting to get user from local database...");
 
                 try
                 {
@@ -792,7 +792,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while downloading user from local database";
                     AppLog.Error("GET USER " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
                 
 
             }
@@ -866,7 +866,7 @@ namespace BTS_Class_Library
 
                 bool ExistsOnLocalDb;
 
-                using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
+                /*using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
                     AppLog.Info("GET USER - Attempting to open connection to local database...");
                     conn.Open();
@@ -971,7 +971,7 @@ namespace BTS_Class_Library
             AppLog.Info("DELETE USER - Attempting to delete user from local database...");
 
             //If deleted from online database successfully, try local database
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -993,7 +993,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting user from local database";
                 AppLog.Error("DELETE USER - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             AppLog.Info(String.Format("DELETE USER - Success!"));
 
             return true;
@@ -1058,7 +1058,7 @@ namespace BTS_Class_Library
             {
                 AppLog.Info("LOGIN USER - Offline mode is ON. Attempting to log user in from local database...");
 
-                try
+                /*try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
@@ -1126,7 +1126,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while downloading user from local database";
                     AppLog.Error("LOGIN USER - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
 
 
             }

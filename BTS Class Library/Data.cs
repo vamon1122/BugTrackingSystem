@@ -430,7 +430,7 @@ namespace BTS_Class_Library
 
         public static string OnlineConnStr = "Server=198.38.83.33;Database=vamon112_bugtrackingsystem;Uid=vamon112_ben;Password=ccjO07JT";
 
-        public static string LocalConnStr = "Data Source = (LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"" +
-            AppDomain.CurrentDomain.BaseDirectory + "BTS_Local_Db.mdf\"; Integrated Security = True";
+        /*public static string LocalConnStr = "Data Source = (LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"" +
+            AppDomain.CurrentDomain.BaseDirectory + "BTS_Local_Db.mdf\"; Integrated Security = True";*/
     }
 }

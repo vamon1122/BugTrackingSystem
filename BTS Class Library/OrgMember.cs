@@ -152,7 +152,7 @@ namespace BTS_Class_Library
 
             AppLog.Info("CREATE ORGMEMBER - Attempting to create organisation member on local database...");
             //If org member was created on the online database successfully, try local database
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -202,29 +202,29 @@ namespace BTS_Class_Library
             }
             catch (SqlException e)
             {
-                /*
+                
                 //If this fails we need to reset the changes
-                _ErrMsg = "Error while creating organisation member on local database. Organisation member will " +
-                    "now be deleted.";
-                AppLog.Error(_ErrMsg + ": " + e);
-
-                AppLog.Info("Attempting to resolve error by deleting organisation member...");
-                if (Delete())
-                {
-                    AppLog.Info("Organisation member deleted. Error resolved successfully!");
-                }
-                else
-                {
+                //_ErrMsg = "Error while creating organisation member on local database. Organisation member will " +
+                //    "now be deleted.";
+                //AppLog.Error(_ErrMsg + ": " + e);
+                //
+                //AppLog.Info("Attempting to resolve error by deleting organisation member...");
+                //if (Delete())
+                //{
+                //    AppLog.Info("Organisation member deleted. Error resolved successfully!");
+                //}
+                //else
+                //{
                     AppLog.Info("Organisation member not deleted. FATAL ERROR!!!");
                     throw new Exception("Fatal error while creating organisation. There was an error and " +
                         "changes could not be reverted.");
                 }
-                return false;*/
+                return false;
 
                 _ErrMsg = "Error while creating organisation member on local database. Changes were saved " +
                     "online so no action required. Continuing... ";
                 AppLog.Error("CREATE ORGMEMBER - " + _ErrMsg + ": " + e);
-            }
+            }*/
             AppLog.Info(String.Format("CREATE ORGMEMBER - Success!"));
             return true;
         }
@@ -297,7 +297,7 @@ namespace BTS_Class_Library
 
             AppLog.Info("UPDATE ORGMEMBER - Attempting to update organisation member on local database...");
             //If online databaase was updated successfully, try local database
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -318,49 +318,48 @@ namespace BTS_Class_Library
             }
             catch (SqlException e)
             {
-                /*
                 //Need to revert changes here
 
-                AppLog.Break();
-                AppLog.Info(@"////////// Restore \\\\\\\\\\");
+                //AppLog.Break();
+                //AppLog.Info(@"////////// Restore \\\\\\\\\\");
+                //
+                //AppLog.Info("UPDATE ORGMEMBER - Attempting to delete organisation member...");
+                //
+                //if (!Delete())
+                //{
+                //    _ErrMsg = "UPDATE ORGMEMBER - Error while trying to delete organisation member";
+                //    AppLog.Info(_ErrMsg);
+                //    return false;
+                //}
+                //AppLog.Info("UPDATE ORGMEMBER - Organisation member deleted successfully!");
+                //
+                //AppLog.Info("UPDATE ORGMEMBER - Restoring values from backup...");
+                //this._MyOrg = BackupOrgMember.MyOrg;
+                //this._MyUser = BackupOrgMember.MyUser;
+                //this._DateTimeJoined = BackupOrgMember.DateTimeJoined;
+                //this._AccessLevel = BackupOrgMember.AccessLevel;
+                //this._ErrMsg = BackupOrgMember.ErrMsg;
+                //AppLog.Info("UPDATE ORGMEMBER - Values restored successfully!");
+                //AppLog.Info("UPDATE ORGMEMBER - Attempting upload...");
+                //if (!Delete())
+                //{
+                //    _ErrMsg = "UPDATE ORGMEMBER - Error while trying to upload organisation member";
+                //    AppLog.Info(_ErrMsg);
+                //    return false;
+                //}
+                //AppLog.Info("UPDATE ORGMEMBER - Organisation member uploaded successfully!");
 
-                AppLog.Info("UPDATE ORGMEMBER - Attempting to delete organisation member...");
+                //AppLog.Info(@"///////////////\\\\\\\\\\\\\\\");
 
-                if (!Delete())
-                {
-                    _ErrMsg = "UPDATE ORGMEMBER - Error while trying to delete organisation member";
-                    AppLog.Info(_ErrMsg);
-                    return false;
-                }
-                AppLog.Info("UPDATE ORGMEMBER - Organisation member deleted successfully!");
-
-                AppLog.Info("UPDATE ORGMEMBER - Restoring values from backup...");
-                this._MyOrg = BackupOrgMember.MyOrg;
-                this._MyUser = BackupOrgMember.MyUser;
-                this._DateTimeJoined = BackupOrgMember.DateTimeJoined;
-                this._AccessLevel = BackupOrgMember.AccessLevel;
-                this._ErrMsg = BackupOrgMember.ErrMsg;
-                AppLog.Info("UPDATE ORGMEMBER - Values restored successfully!");
-                AppLog.Info("UPDATE ORGMEMBER - Attempting upload...");
-                if (!Delete())
-                {
-                    _ErrMsg = "UPDATE ORGMEMBER - Error while trying to upload organisation member";
-                    AppLog.Info(_ErrMsg);
-                    return false;
-                }
-                AppLog.Info("UPDATE ORGMEMBER - Organisation member uploaded successfully!");
-
-                AppLog.Info(@"///////////////\\\\\\\\\\\\\\\");
-
-                _ErrMsg = "Error while updating organisation member on local database. Changes have been reverted.";
-                AppLog.Error(_ErrMsg + ": " + e);
-                return false;
-                */
+                //_ErrMsg = "Error while updating organisation member on local database. Changes have been reverted.";
+                //AppLog.Error(_ErrMsg + ": " + e);
+                //return false;
+                
 
                 _ErrMsg = "Error while updating organisation member on local database. Changes were saved online " +
                     "so no action required. Continuing...";
                 AppLog.Error("UPDATE ORGMEMBER - " + _ErrMsg + ": " + e);
-            }
+            }*/
             AppLog.Info(String.Format("UPDATE ORGMEMBER - Success!"));
             return true;
         }
@@ -376,7 +375,7 @@ namespace BTS_Class_Library
             {
                 AppLog.Info("GET ORGMEMBER - Offline mode is ON. Attempting to download organisation member" +
                     " from local database...");
-                try
+                /*try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
@@ -413,7 +412,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting organisation member from local database";
                     AppLog.Error("GET ORGMEMBER - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
 
             }
             else
@@ -463,7 +462,7 @@ namespace BTS_Class_Library
 
                 bool ExistsOnLocalDb;
 
-                using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
+                /*using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
                     AppLog.Info("GET ORGMEMBER - Attempting to open connection to local database...");
                     conn.Open();
@@ -512,7 +511,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET ORGMEMBER - Failed to create org member: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
             }
             AppLog.Info(String.Format("GET ORGMEMBER - Success!"));
             return true;
@@ -568,7 +567,7 @@ namespace BTS_Class_Library
 
             //If deleted from online database successfully, try local database
             AppLog.Info("DELETE USER - Attempting to delete organisation member from local database...");
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -592,7 +591,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting organisation member from local database";
                 AppLog.Error("DELETE ORGMEMBER" + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             //AffectedRows = 0; Why did this need resetting?? 09/10/2017 15:50
             AppLog.Info(String.Format("DELETE ORGMEMBER - Success!"));
             return true;

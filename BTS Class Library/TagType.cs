@@ -144,7 +144,7 @@ namespace BTS_Class_Library
                         "online database"));
             }
 
-            AppLog.Info("CREATE TAGTYPE - Attempting to create tag type on local database...");
+            /*AppLog.Info("CREATE TAGTYPE - Attempting to create tag type on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -199,7 +199,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while creating tag type on local database";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             AppLog.Info("CREATE TAGTYPE - Success!");
             return true;
         }
@@ -245,7 +245,7 @@ namespace BTS_Class_Library
             }
 
                 AppLog.Info("UPDATE TAGTYPE - Attempting to update tag type on local database...");
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -270,7 +270,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating tag type on local database. Changes were not saved";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             
             AppLog.Info("UPDATE TAGTYPE - Success!");
             return true;
@@ -281,7 +281,7 @@ namespace BTS_Class_Library
             AppLog.Info("GET TAGTYPE - Starting...");
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET TAGTYPE - Attempting to retrieve tag type from local database...");
+                /*AppLog.Info("GET TAGTYPE - Attempting to retrieve tag type from local database...");
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -313,7 +313,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting TagType from local database";
                     AppLog.Error(_ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -354,7 +354,7 @@ namespace BTS_Class_Library
 
                 bool ExistsOnLocalDb;
 
-                using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
+                /*using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
                     AppLog.Info("GET TAGTYPE - Attempting to open connection to local database...");
                     conn.Open();
@@ -401,7 +401,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET TAGTYPE - Failed to create tag type: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
 
             }
             AppLog.Info("GET TAGTYPE - Success!");
@@ -412,7 +412,7 @@ namespace BTS_Class_Library
         {
             AppLog.Info("DELETE TAGTYPE - Starting...");
 
-            AppLog.Info("DELETE TAGTYPE - Attempting to delete tag type from local database...");
+            /*AppLog.Info("DELETE TAGTYPE - Attempting to delete tag type from local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -434,7 +434,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting TagType from local database";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("DELETE TAGTYPE - Attempting to delete tag type from online database...");
             try

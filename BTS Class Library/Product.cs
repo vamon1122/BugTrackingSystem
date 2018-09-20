@@ -163,7 +163,7 @@ namespace BTS_Class_Library
                 AppLog.Info(String.Format("CREATE PRODUCT - Offline mode is ON. Skipping create product on" +
                         "online database"));
             }
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -213,7 +213,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while creating product on local database";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
 
             AppLog.Debug("CREATE PRODUCT - Attempting to add product to DATA...");
@@ -264,7 +264,7 @@ namespace BTS_Class_Library
             }
 
             AppLog.Info("UPDATE PRODUCT - Attempting to update product on local database...");
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -288,7 +288,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating product on local database. Changes were not saved";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("UPDATE PRODUCT - Success!");
             return true;
@@ -300,7 +300,7 @@ namespace BTS_Class_Library
             if (Data.OfflineMode)
             {
                 AppLog.Info("GET PRODUCT - Attempting to retrieve product from local database...");
-                try
+                /*try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
@@ -330,7 +330,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting product from local database";
                     AppLog.Error(_ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -371,7 +371,7 @@ namespace BTS_Class_Library
 
                 bool ExistsOnLocalDb;
 
-                using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
+                /*using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
                     AppLog.Info("GET PRODUCT - Attempting to open connection to local database...");
                     conn.Open();
@@ -418,7 +418,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET PRODUCT - Failed to create product: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
 
             }
             AppLog.Info("GET PRODUCT - Success!");
@@ -429,7 +429,7 @@ namespace BTS_Class_Library
         {
             AppLog.Info("DELETE PRODUCT - Starting...");
 
-            AppLog.Info("DELETE PRODUCT - Attempting to delete product from local database...");
+            /*AppLog.Info("DELETE PRODUCT - Attempting to delete product from local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -451,7 +451,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting product from local database";
                 AppLog.Error(_ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("DELETE PRODUCT - Attempting to delete product from online database...");
             try

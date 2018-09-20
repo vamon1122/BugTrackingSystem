@@ -127,7 +127,7 @@ namespace BTS_Class_Library
                     "online database"));
             }
 
-            AppLog.Info("CREATE TAG - Attempting to create tag on local database...");
+            /*AppLog.Info("CREATE TAG - Attempting to create tag on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -180,7 +180,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while creating tag on local database";
                 AppLog.Error("CREATE TAG - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
 
             AppLog.Info("CREATE TAG - Success!");
@@ -195,7 +195,7 @@ namespace BTS_Class_Library
             {
                 AppLog.Info("GET TAG - Offline mode is ON, retrieving cached tag data from local database");
                 AppLog.Info("GET TAG - Attempting to download tag from local database...");
-                try
+                /*try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
@@ -230,7 +230,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting tag from local database";
                     AppLog.Error("GET TAG - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -274,7 +274,7 @@ namespace BTS_Class_Library
                 }
 
                 //Finally, check if tag exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!!
-                AppLog.Info("GET TAG - Checking whether tag exists in local database");
+                /*AppLog.Info("GET TAG - Checking whether tag exists in local database");
 
                 bool ExistsOnLocalDb;
 
@@ -317,7 +317,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET TAG - Failed to create tag: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
             }
             AppLog.Info("GET TAG - Success!");
             return true;
@@ -328,7 +328,7 @@ namespace BTS_Class_Library
             AppLog.Info("DELETE TAG - Starting...");
 
             AppLog.Info("DELETE TAG - Attempting to delete tag from local database...");
-            try
+            /*try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -348,7 +348,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting tag from local database";
                 AppLog.Error("DELETE TAG - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("DELETE TAG - Attempting to delete tag on online database...");
             try

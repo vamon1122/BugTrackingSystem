@@ -205,7 +205,7 @@ namespace BTS_Class_Library
 
             //If the organisation was created on the online database without throwing any errors,
             //try and create it on the local database
-            AppLog.Info("CREATE ORG - Attempting to create organisation on local database...");
+            /*AppLog.Info("CREATE ORG - Attempting to create organisation on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -257,7 +257,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while creating organisation on local database. Changes were saved online so " +
                     "no action required. Continuing... ";
                 AppLog.Error("CREATE ORG - " + _ErrMsg + ": " + e);
-            }
+            }*/
 
             AppLog.Debug("CREATE ORG - Attempting to add organisation to DATA...");
 
@@ -325,7 +325,7 @@ namespace BTS_Class_Library
             AffectedRows = 0;
 
             //If online database was updated successfully, try updating local database
-            try
+            /*try
             {
                 AppLog.Info("UPDATE ORG - Attempting to update organisation on local database...");
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -348,7 +348,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating user on local database. Changes were saved online so " +
                     "no action required. Continuing...";
                 AppLog.Error("UPDATE ORG - " + _ErrMsg + ": " + e);
-            }
+            }*/
             AppLog.Info(String.Format("UPDATE ORG - Success!"));
             return true;
         }
@@ -361,38 +361,13 @@ namespace BTS_Class_Library
             //Get from local
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET ORG - Offline mode is ON. Attempting to download organisation from local database...");
+                /*AppLog.Info("GET ORG - Offline mode is ON. Attempting to download organisation from local database...");
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                     {
                         //Moved to Data.Initialise
-                        /*
-                        AppLog.Info("GET ORG - Attempting to open connection to local database...");
-                        conn.Open();
-                        AppLog.Info("GET ORG - Connection to local database opened successfully");
-
-                        SqlCommand GetOrganisation = new SqlCommand("SELECT * FROM Organisations WHERE Id = @Id;", conn);
-                        GetOrganisation.Parameters.Add(new SqlParameter("Id", _Id));
-
-                        using (SqlDataReader reader = GetOrganisation.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                _Name = reader[1].ToString().Trim();
-                                _DateTimeCreated = Convert.ToDateTime(reader[2]);
-                            }
-                            else
-                            {
-                                //If reader.Read() returns false, no data was returned
-                                _ErrMsg = "Error while downloading organisation from local database. No data" +
-                                    " was returned";
-                                AppLog.Error("GET ORG - " + _ErrMsg);
-                                return false;
-                            }
-                        }
-                        AppLog.Info(String.Format("GET ORG - Organisation {0} downloaded from local database successfully",
-                       _Name));*/
+                        
                     }
                 }
                 catch (SqlException e)
@@ -400,7 +375,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while getting organisation from local database";
                     AppLog.Error("GET ORG - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
                 
             }
             else//Get from online
@@ -449,7 +424,7 @@ namespace BTS_Class_Library
                 //Finally, check if organisation exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!!
                 AppLog.Info("GET ORGANISATION - Checking whether organisation exists in local database");
 
-                bool ExistsOnLocalDb;
+                /*bool ExistsOnLocalDb;
 
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
                 {
@@ -498,7 +473,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET ORGANISATION - Failed to create organisation: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
             }
 
             AppLog.Info(String.Format("GET ORG - Success!"));
@@ -521,7 +496,7 @@ namespace BTS_Class_Library
                 return false;
             }
             //If offline mode is off, first try deleting from online database
-            AppLog.Info("DELETE ORG - Attempting to delete organisation from local database...");
+            /*AppLog.Info("DELETE ORG - Attempting to delete organisation from local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -552,7 +527,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while deleting organisation from local database";
                 AppLog.Error("DELETE ORG - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             
 
             AffectedRows = 0;
