@@ -23,7 +23,7 @@ namespace BTS_Class_Library
         private Guid _EditedByUserId;
         public bool Uploaded;
         private static string OnlineConnStr = Data.OnlineConnStr;
-        private static string LocalConnStr = Data.LocalConnStr;
+        //private static string LocalConnStr = Data.LocalConnStr;
 
         public Guid EditedByUserId { get; set; }
         public DateTime DateTimeEdited { get; set; }
@@ -299,7 +299,7 @@ namespace BTS_Class_Library
                 return false;
             }
 
-            AppLog.Info("CREATE BUG - Attempting to create bug on local database...");
+            /*AppLog.Info("CREATE BUG - Attempting to create bug on local database...");
             try //Local
             {
                 using (SqlConnection conn = new SqlConnection(LocalConnStr))
@@ -363,7 +363,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while creating bug on local database. Changes were not saved";
                     AppLog.Error("CREATE BUG - " + _ErrMsg + ": " + e);
                     return false;
-            }
+            }*/
 
             
                 //### New Functionality
@@ -446,7 +446,7 @@ namespace BTS_Class_Library
                 return false;
             }
 
-            AppLog.Info("UPDATE BUG - Attempting to update bug on local database...");
+            /*AppLog.Info("UPDATE BUG - Attempting to update bug on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(LocalConnStr))
@@ -483,7 +483,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating bug on local database. Changes were not saved";
                 AppLog.Error("UPDATE BUG - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             //### New Functionality
             /*foreach (Note TempNote in Data.Notes)
@@ -565,7 +565,7 @@ namespace BTS_Class_Library
 
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET BUG - Offline mode is ON, retrieving cached bug data from local database");
+                /*AppLog.Info("GET BUG - Offline mode is ON, retrieving cached bug data from local database");
                 AppLog.Info("GET BUG - Attempting to retrieve bug from local database...");
                 try
                 {
@@ -608,7 +608,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error downloading bug from the local database";
                     AppLog.Error("GET BUG - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -659,7 +659,7 @@ namespace BTS_Class_Library
                 }
 
                 //Finally, check if bug exists in the local database. If not, ADD IT!!!
-                AppLog.Info("GET BUG - Checking whether bug exists in local database");
+                /*AppLog.Info("GET BUG - Checking whether bug exists in local database");
 
                 bool LocalBugExists;
 
@@ -710,7 +710,7 @@ namespace BTS_Class_Library
                         AppLog.Info("GET BUG - Failed to create bug: " + _ErrMsg);
                         return false;
                     }
-                }
+                }*/
             }
 
             //### New Functionality
@@ -737,7 +737,7 @@ namespace BTS_Class_Library
         {
             AppLog.Info("DELETE BUG - Starting...");
 
-            AppLog.Info("DELETE BUG - Attempting to delete bug on local database...");
+            /*AppLog.Info("DELETE BUG - Attempting to delete bug on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(LocalConnStr))
@@ -777,7 +777,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error deleting bug from the local database";
                 AppLog.Error("DELETE BUG - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("DELETE BUG - Attempting to delete bug on online database...");
             try

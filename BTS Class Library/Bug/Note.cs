@@ -193,7 +193,7 @@ namespace BTS_Class_Library
                     "online database"));
             }
 
-            AppLog.Info("CREATE NOTE - Attempting to create note on local database...");
+            /*AppLog.Info("CREATE NOTE - Attempting to create note on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -249,7 +249,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error while creating note on local database. Changes were not saved";
                     AppLog.Error("CREATE NOTE - " + _ErrMsg + ": " + e);
                     return false;
-            }
+            }*/
 
             AppLog.Info("CREATE NOTE - Success!");
             return true;
@@ -300,7 +300,7 @@ namespace BTS_Class_Library
                 AppLog.Info("UPDATE NOTE - Offline mode is ON. Skipping update note on online database");
             }
 
-            AppLog.Info("UPDATE NOTE - Attempting to update note on local database...");
+            /*AppLog.Info("UPDATE NOTE - Attempting to update note on local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -326,7 +326,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error while updating note on local database. Changes were not saved.";
                 AppLog.Error("UPDATE NOTE - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
             AppLog.Info("UPDATE NOTE - Success!");
             return true;
         }
@@ -336,7 +336,7 @@ namespace BTS_Class_Library
             AppLog.Info("GET NOTE - Starting...");
             if (Data.OfflineMode)
             {
-                AppLog.Info("GET NOTE - Offline mode is ON, retrieving cached note data from local database");
+                /*AppLog.Info("GET NOTE - Offline mode is ON, retrieving cached note data from local database");
                 AppLog.Info("GET NOTE - Attempting to get note from local database...");
                 try
                 {
@@ -372,7 +372,7 @@ namespace BTS_Class_Library
                     _ErrMsg = "Error getting note from local database";
                     AppLog.Error("GET NOTE - " + _ErrMsg + ": " + e);
                     return false;
-                }
+                }*/
             }
             else
             {
@@ -473,8 +473,8 @@ namespace BTS_Class_Library
 
         public bool Delete()
         {
-            AppLog.Info("<FUNCTION> <CLASS> - Starting...");
-            AppLog.Info("DELETE NOTE - Attempting to delete note from local database...");
+            AppLog.Info("DELETE NOTE - Starting...");
+            /*AppLog.Info("DELETE NOTE - Attempting to delete note from local database...");
             try
             {
                 using (SqlConnection conn = new SqlConnection(Data.LocalConnStr))
@@ -494,7 +494,7 @@ namespace BTS_Class_Library
                 _ErrMsg = "Error deleting note from local database";
                 AppLog.Error("DELETE NOTE - " + _ErrMsg + ": " + e);
                 return false;
-            }
+            }*/
 
             AppLog.Info("DELETE NOTE - Attempting to delete note from online database...");
             try
