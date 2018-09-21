@@ -861,7 +861,8 @@ namespace BTS_Class_Library
                 }
 
                 //Finally, check if user exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!!
-                AppLog.Info("GET USER - Checking whether user exists in local database");
+                //Not doing this anymore because it causes crash when in release.
+                /*AppLog.Info("GET USER - Checking whether user exists in local database");
 
                 bool ExistsOnLocalDb;
 

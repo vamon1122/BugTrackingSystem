@@ -1,19 +1,25 @@
 ﻿using System;
+using BTS_Class_Library;
+using System.Configuration;
+using System.Windows;
+using System.Windows.Input;
+using System.Reflection;
+
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
+
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using BTS_Class_Library;
-using System.Configuration;
+
 
 namespace BTS_WPF
 {
@@ -27,7 +33,10 @@ namespace BTS_WPF
         {
             //this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            if(ConfigurationManager.AppSettings["UsernameOrEmail"] != "")
+
+            AppVersLabel.Content = String.Format("(Vers {0})", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            if (ConfigurationManager.AppSettings["UsernameOrEmail"] != "")
             {
                 input_UsernameOrEMail.Text = ConfigurationManager.AppSettings["UsernameOrEmail"];
                 RememberMe.IsChecked = true;
