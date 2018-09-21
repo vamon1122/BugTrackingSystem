@@ -370,7 +370,7 @@ namespace BTS_Class_Library
                                 AddAssignee(TempAssignee);
                                 NoOfDownloadedAssignees++;
                             }
-                            AppLog.Debug(String.Format("Found {0} assignees(s) for {1}", NoOfDownloadedAssignees, mybug.Title));
+                            //AppLog.Debug(String.Format("Found {0} assignees(s) for {1}", NoOfDownloadedAssignees, mybug.Title));
                         }
                         
                     }
@@ -398,7 +398,7 @@ namespace BTS_Class_Library
                                 NoOfDownloadedTags++;
                             }
                         }
-                        AppLog.Debug(String.Format("Found {0} tag(s) for {1}", NoOfDownloadedTags, mybug.Title));
+                        //AppLog.Debug(String.Format("Found {0} tag(s) for {1}", NoOfDownloadedTags, mybug.Title));
                     }
                     return true;
                 }
@@ -421,7 +421,7 @@ namespace BTS_Class_Library
                                 NoOfDownloadedNotes++;
                             }
                         }
-                        AppLog.Debug(String.Format("Found {0} notes(s) for {1}", NoOfDownloadedNotes, mybug.Title));
+                        //AppLog.Debug(String.Format("Found {0} notes(s) for {1}", NoOfDownloadedNotes, mybug.Title));
                     }
                     return true;
                 }
