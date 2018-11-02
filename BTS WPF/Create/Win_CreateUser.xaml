@@ -31,10 +31,5 @@
         <PasswordBox x:Name="input_ConfirmPassword" Style="{StaticResource PasswordBoxStyle}" HorizontalAlignment="Left" Margin="116,253,0,-10" VerticalAlignment="Top" RenderTransformOrigin="-0.16,0.294" MaxLength="50" />
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="181,298,0,0" VerticalAlignment="Top" Width="75" Click="Cancel_Click" />
         <Button Content="Sign Up" HorizontalAlignment="Left" Margin="261,298,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" IsDefault="True" RenderTransformOrigin="0.98,0.625"/>
-
-
-
-
-
     </Grid>
 </Window>

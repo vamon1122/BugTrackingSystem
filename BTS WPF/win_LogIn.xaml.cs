@@ -61,11 +61,14 @@ namespace BTS_WPF
 
         private void LogIn()
         {
+            //Styles are defined at the top of the function
             Style style_TextBoxError = Application.Current.FindResource("TextBoxError") as Style;
             Style style_PasswordBoxError = Application.Current.FindResource("PasswordBoxError") as Style;
 
+            //Success bool will be set to false if there is an error
             bool ValidateSuccess = true;
 
+            //Checks that username/email is not blank
             if (input_UsernameOrEMail.Text == "")
             {
                 ValidateSuccess = false;
@@ -74,6 +77,7 @@ namespace BTS_WPF
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            //Checks password is not blank
             if (input_Password.Password == "")
             {
                 ValidateSuccess = false;
@@ -81,6 +85,7 @@ namespace BTS_WPF
                 MessageBox.Show("You cannot leave the password field blank", "Blank Field",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
 
             if (ValidateSuccess)
             {

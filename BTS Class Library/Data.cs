@@ -137,16 +137,71 @@ namespace BTS_Class_Library
                 conn.Open();
 
 
-
+                DateTime GetUserOrgsStart = DateTime.Now;
                 GetUserOrgs();
+                DateTime GetUserOrgsEnd = DateTime.Now;
+                double GetUserOrgsTimeTaken = (GetUserOrgsEnd - GetUserOrgsStart).TotalSeconds;
+
+                DateTime GetOrgMembersStart = DateTime.Now;
                 GetOrgMembers();
+                DateTime GetOrgMembersEnd = DateTime.Now;
+                double GetOrgMembersTimeTaken = (GetOrgMembersEnd - GetOrgMembersStart).TotalSeconds;
+
+                DateTime GetOrgMemberUsersStart = DateTime.Now;
                 GetOrgMemberUsers();
+                DateTime GetOrgMemberUsersEnd = DateTime.Now;
+                double GetOrgMemberUsersTimeTaken = (GetOrgMemberUsersEnd - GetOrgMemberUsersStart).TotalSeconds;
+
+                DateTime GetOrgTagTypesStart = DateTime.Now;
                 GetOrgTagTypes();
+                DateTime GetOrgTagTypesEnd = DateTime.Now;
+                double GetOrgTagTypesTimeTaken = (GetOrgTagTypesEnd - GetOrgTagTypesStart).TotalSeconds;
+
+                DateTime GetOrgProductsStart = DateTime.Now;
                 GetOrgProducts();
-                GetOrgBugs();
+                DateTime GetOrgProductsEnd = DateTime.Now;
+                double GetOrgProductsTimeTaken = (GetOrgProductsEnd - GetOrgProductsStart).TotalSeconds;
+
+                DateTime GetProductBugsStart = DateTime.Now;
+                GetProductBugs();
+                DateTime GetProductBugsEnd = DateTime.Now;
+                double GetProductBugsTimeTaken = (GetProductBugsEnd - GetProductBugsStart).TotalSeconds;
+
+                DateTime GetBugAssigneesStart = DateTime.Now;
                 GetBugAssignees();
+                DateTime GetBugAssigneesEnd = DateTime.Now;
+                double GetBugAssigneesTimeTaken = (GetBugAssigneesEnd - GetBugAssigneesStart).TotalSeconds;
+
+                DateTime GetBugTagsStart = DateTime.Now;
                 GetBugTags();
+                DateTime GetBugTagsEnd = DateTime.Now;
+                double GetBugTagsTimeTaken = (GetBugTagsEnd - GetBugTagsStart).TotalSeconds;
+
+                DateTime GetBugNotesStart = DateTime.Now;
                 GetBugNotes();
+                DateTime GetBugNotesEnd = DateTime.Now;
+                double GetBugNotesTimeTaken = (GetBugNotesEnd - GetBugNotesStart).TotalSeconds;
+
+                AppLog.Debug(String.Format("({0}) Active user's organisations were loaded from the database in {0} seconds", GetUserOrgsTimeTaken));
+                AppLog.Debug(String.Format("({0}) Organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetOrgMembersTimeTaken));
+                AppLog.Debug(String.Format("({0}) Members of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetOrgMemberUsersTimeTaken));
+                AppLog.Debug(String.Format("({0}) Tag types of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetOrgTagTypesTimeTaken));
+                AppLog.Debug(String.Format("({0}) Products of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetOrgProductsTimeTaken));
+                AppLog.Debug(String.Format("({0}) Bugs of the products of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetProductBugsTimeTaken));
+                AppLog.Debug(String.Format("({0}) Assignees of the bugs of the products of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetBugAssigneesTimeTaken));
+                AppLog.Debug(String.Format("({0}) Tags of the bugs of the products of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetBugTagsTimeTaken));
+                AppLog.Debug(String.Format("({0}) Notes of the bugs of the products of the organisations which 'active user' is a member of were loaded from the database in {0} seconds", GetBugNotesTimeTaken));
+                AppLog.Debug(String.Format("({0}) Success! All items from the database were loaded successfully! Total load time = ",
+                    (GetUserOrgsTimeTaken + 
+                    GetOrgMembersTimeTaken + 
+                    GetOrgMemberUsersTimeTaken + 
+                    GetOrgTagTypesTimeTaken + 
+                    GetOrgProductsTimeTaken + 
+                    GetProductBugsTimeTaken + 
+                    GetBugAssigneesTimeTaken + 
+                    GetBugTagsTimeTaken + 
+                    GetBugNotesTimeTaken
+                    )));
 
                 bool GetUserOrgs()
                 {
@@ -316,7 +371,7 @@ namespace BTS_Class_Library
                     return true;
                 }
 
-                bool GetOrgBugs()
+                bool GetProductBugs()
                 {
                     AppLog.Debug("BEN !!! Getting organisation's bugs");
                     foreach(Product prod in Products)

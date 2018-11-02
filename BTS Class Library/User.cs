@@ -860,7 +860,7 @@ namespace BTS_Class_Library
                     return false;
                 }
 
-                //Finally, check if user exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!!
+                //Finally, check if user exists in the local database. If not, ADD THEM!!! If so, UPDATE THEM!!! 
                 //Not doing this anymore because it causes crash when in release.
                 /*AppLog.Info("GET USER - Checking whether user exists in local database");
 
@@ -1130,50 +1130,73 @@ namespace BTS_Class_Library
 
 
             }
-            else //If offline mode is off, latest copy of user will be downloaded from the online database
+            else 
             {
+                //Offline mode is off, latest copy of user will be downloaded from the online database
                 AppLog.Info("LOGIN USER - Offline mode is OFF. Attempting to download user from online database...");
                 try
                 {
                     using (SqlConnection conn = new SqlConnection(Data.OnlineConnStr))
                     {
                         AppLog.Info("LOGIN USER - Attempting to open connection to online database...");
-
+                        //Connection to the database is opened here
                         conn.Open();
                         AppLog.Info("LOGIN USER - Connection to online database opened successfully");
 
+                        //Sql command needs to be accessible within this block.
+                        //It will be given a value by the IF statements below
                         SqlCommand LogInUserOnline;
 
+                        //IF block to decide how the user should be logged in.
                         if (Username != null && Username != "")
                         {
+                            //If an username was provided, try and log in using the username & password
                             AppLog.Info("LOGIN USER - User has a username. Attempting log in using username...");
                             LogInUserOnline = new SqlCommand("SELECT Id FROM t_Users WHERE Username = @Username " +
                             "AND Password = @Password;", conn);
 
+                            //The username is a parameter of the log in SQL select statement. 
+                            //Password is the same regardless so it is set after this IF block.
                             LogInUserOnline.Parameters.Add(new SqlParameter("Username", _Username));
                         }
                         else if (EMail != null && EMail != "")
                         {
+                            //If no username was provided but an email address was, try and log in using the email address & password
                             AppLog.Info("LOGIN USER - User does not have a username. Attempting log in using email...");
                             LogInUserOnline = new SqlCommand("SELECT Id FROM t_Users WHERE EMail = @EMail " +
                             "AND Password = @Password;", conn);
+
+                            //The email is a parameter of the log in SQL select statement.
+                            //Password is the same regardless so it is set after this IF block.
                             LogInUserOnline.Parameters.Add(new SqlParameter("EMail", _EMail));
                         }
                         else
                         {
+                            //If neither an username or an email address were provided, the user cannot be logged in!
+
+                            //Reason for failing will be processed in the 'catch' block
                             _ErrMsg = "Could not log in because user has not been given a username or email";
                             AppLog.Error("LOGIN USER - Failed: " + _ErrMsg);
+
+                            //Return false beacause the user can't be logged in.
                             return false;
                         }
+                        
 
+                        //The password parameter is required regardless of whether the username or email address os used to log in
                         LogInUserOnline.Parameters.Add(new SqlParameter("Password", Password));
 
+                        //This reads the results of the query
                         using (SqlDataReader reader = LogInUserOnline.ExecuteReader())
                         {
-                            if (reader.Read())//If the user was found, take the guid and use Get() to download
-                            {                  //the rest of the user
+                            //If a record (user ID) was returned, read it!
+                            if (reader.Read())
+                            {
+                                //The user record's ID returned. User objects ID is set to equal this value.
                                 _Id = new Guid(reader[0].ToString());
                                 AppLog.Info("LOGIN USER - Attempting to download user details...");
+                                
+                                //Use the GET function to retrieve all of the user's data from the database and initialise the object's other values
                                 if (Get())
                                 {
                                     AppLog.Info("LOGIN USER - Got user details successfully");
@@ -1181,20 +1204,26 @@ namespace BTS_Class_Library
                                 else
                                 {
                                     AppLog.Error("LOGIN USER - Failed to get user details: " + ErrMsg);
+                                    //Return false because there was an error whilst the 'Get()' method was getting user details from the database, hence the log in fails.
                                     return false;
                                 }
                             }
                             else
                             {
-                                //If reader.Read() returns false, no data was returned.
+                                //If reader.Read() returns false, no data was returned (i.e. no records in the database matched the username/pwd or email/pwd combination.
+
+                                //Reason for failing will be processed in the 'catch' block
                                 _ErrMsg = "No user with that username/e-mail and password combination was found. Please try again.";
                                 AppLog.Error("LOGIN USER - Error while logging user in from online database. No data was returned. " + _ErrMsg);
+
+                                //Return false because no user who matches the criteria was found on the database.
                                 return false;
                             }
                         }
                     }
                     AppLog.Info(String.Format("LOGIN USER - Got {0} from online database successfully", _Username));
                 }
+                //Handles any errors which occured whilst logging in.
                 catch (SqlException e)
                 {
                     _ErrMsg = "Error while logging in user from online database: " + ErrMsg;
