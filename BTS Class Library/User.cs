@@ -795,7 +795,7 @@ namespace BTS_Class_Library
                 }*/
                 
 
-            }
+            }//BALTIC#2
             else //If offline mode is off, latest copy of user will be downloaded from the online database
             {
                 AppLog.Info("GET USER - Offline mode is OFF. Attempting to download user from online database...");
@@ -1130,8 +1130,8 @@ namespace BTS_Class_Library
 
 
             }
-            else 
-            {
+            else
+            {//BALTIC#1
                 //Offline mode is off, latest copy of user will be downloaded from the online database
                 AppLog.Info("LOGIN USER - Offline mode is OFF. Attempting to download user from online database...");
                 try
